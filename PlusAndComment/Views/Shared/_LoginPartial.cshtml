@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Zarządzaj" })</li>
+        <li>@Html.ActionLink("Dodaj", "AddPost", "Home", routeValues: null, htmlAttributes: new { title = "Dodaj" })</li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a></li>
+
+        @if (ViewContext.HttpContext.User.IsInRole("Admin"))
+        {
+            <li>
+                @Html.ActionLink("Zarządzanie rolami", "ManageRoles", "Manage", routeValues: null, htmlAttributes: new { title = "Zarządzanie" })
+            </li>
+        }
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><div style="margin-top:15px" class="fb-like" data-href="https://www.trudneżarty.pl" data-layout="button" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div> </li>
+        <li>@Html.ActionLink("Zarejestruj się", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Zaloguj", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
+    </ul>
+}

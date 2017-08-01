@@ -1,0 +1,36 @@
+﻿@model PlusAndComment.Models.MainPostVM
+
+@{
+    Html.EnableClientValidation();
+    Model.LongDescription = string.Empty;
+}
+
+
+@using (Ajax.BeginForm("AddComment", "Home",
+                                    new AjaxOptions
+                                    {
+                                        HttpMethod = "POST",
+                                        InsertionMode = InsertionMode.InsertBefore,
+                                        UpdateTargetId = "targetXXX2_" + Model.ID,
+                                        OnSuccess = "OnAddCommentCoplete(" + Model.ID + ")",
+                                        OnFailure = "OnAddCommentFailure",
+                                        OnComplete = "DisableCommentButton("+Model.ID+", false)"
+                                    }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div id="leaveCommentContainer_@(Model.ID)">
+        <div class="well wellLeaveComment" id="wellLeaveComment_@(Model.ID)">
+
+            @Html.HiddenFor(m => m.ID)
+            @Html.TextAreaFor(m => m.LongDescription, new { @id="ld_"+Model.ID, @class = "commentText" })
+            @Html.ValidationMessageFor(m => m.LongDescription, "", new { @class = "text-danger" })
+            &nbsp
+            <button id="commentButton_@(Model.ID)" onClick="DisableCommentButton(@(Model.ID), true);" type="submit" class="btn btn-primary btn-xs commentButton">Skomentuj</button>
+
+        </div>
+    </div>
+}
+
+<div id="targetXXX2_@(Model.ID)" style="margin-left: 20px;"></div>
