@@ -24,9 +24,15 @@
 </script> 
 
 <div class="container" style="max-width: 100%; margin-top: 20px;">
-    <div class="col-md-3">
-        @*@Html.Partial("Articles", null)*@
-    </div >
+
+    <div class="col-md-3" style="background-color: #5c737f; border-radius: 4px;">
+        <h3>Artykuły</h3>
+        @foreach (var article in Model.Articles)
+        {
+            @Html.Partial("_ArticlesPartial", article)
+        }
+    </div>
+
     <div class="col-md-6">
         @foreach (var item in Model.Posts)
         {

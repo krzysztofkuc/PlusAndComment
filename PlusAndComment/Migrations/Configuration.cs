@@ -10,6 +10,7 @@ namespace PlusAndComment.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "PlusAndComment.Models.ApplicationDbContext";
         }
 

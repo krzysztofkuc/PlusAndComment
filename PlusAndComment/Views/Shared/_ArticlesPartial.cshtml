@@ -1,0 +1,15 @@
+﻿@model PlusAndComment.Models.ArticleVM
+
+<div class="row">
+    <div class="thumbnail" style="background-color: #D0D0D0; margin: 3px 3px 3px 3px">
+        <img src="@Url.Content(Model.RelThumbPath)" style="width: auto;  text-overflow: ellipsis;" />
+                <div class="caption">
+            <h4>@Html.DisplayFor(m => m.Header)</h4>
+            @Model.LongDesc.Substring(0, 200))
+            ...
+            <div style="margin-top: 5px; width: 100%; display: block; word-wrap: break-word">
+                <a href=@Model.Url>@Model.Url</a>
+            </div>
+        </div>
+    </div>
+</div>
