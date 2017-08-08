@@ -106,7 +106,8 @@
                             <i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie
                         </label>
                         <input type="file" id="imageUploadForm" class="custom-file-upload " />
-                        &nbsp;<label id="WriteTextBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-font" aria-hidden="true"></span>&nbsp;Tekst</label>
+                        &nbsp;<label id="WriteTextBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-font" aria-hidden="true"></span>&nbsp;Tekst | </label>
+                        <label id="AddSucharBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Suchar</label>
                     </div>
                     <hr style="margin-top: 50px; margin-bottom: 0">
                     <div>
@@ -116,6 +117,10 @@
                     <div>
                         @Html.TextAreaFor(model => model.Content, new { @class = "input contentText", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Wpisz tekst" })
                         @Html.ValidationMessageFor(model => model.Content)
+                    </div>
+                    <div>
+                        @Html.TextAreaFor(model => model.suchar.Content, new { @class = "input contentText", @id = "contentSuchar", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Wpisz tekst" })
+                        @Html.ValidationMessageFor(model => model.suchar.Content)
                     </div>
                     <div>
                         <hr style="margin: 0 0 0 0">
@@ -196,11 +201,22 @@
         contentLinkChanged(elem.val())
     }
 
+    $('#AddSucharBtn').click(function () {
+        $(".contentText").val("");
+        $(".contentLink").val("");
+        $("#ContentDescription").val("");
+        $(".contentLink").hide();
+        $(".contentText").hide();
+        $("#ContentDescription").hide();
+        $("#contentSuchar").show();
+    });
+
     $('#imageUploadForm').click(function () {
             $(".contentText").val("");
             $(".contentLink").val("");
             $(".contentLink").hide();
             $(".contentText").hide();
+            $("#contentSuchar").hide();
             $("#ContentDescription").hide();
         });
 
@@ -208,12 +224,16 @@
             $(".contentText").hide();
             $(".contentText").val("");
             $(".contentLink").show();
+            $("#contentSuchar").hide();
+            $("#contentSuchar").val("");
             $("#ContentDescription").show();
         });
 
         $('#WriteTextBtn').click(function () {
             $(".contentLink").hide();
             $("#ContentDescription").hide();
+            $("#contentSuchar").hide();
+            $("#contentSuchar").val("");
             $(".contentLink").val("");
             $(".contentText").show();
             $('#addPostButton').attr("disabled", false);

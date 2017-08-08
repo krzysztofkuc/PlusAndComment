@@ -24,33 +24,44 @@
 </script> 
 
 <div class="container" style="max-width: 100%; margin-top: 20px;">
+    <div class="row">
+        <div class="col-md-3" style="background-color: #465861; border-radius: 4px;">
+            <div>
+                <h3>Tak było...</h3>
+                @foreach (var article in Model.Articles)
+                {
+                    @Html.Partial("_ArticlesPartial", article)
+                }
+            </div>
+        </div>
 
-    <div class="col-md-3" style="background-color: #5c737f; border-radius: 4px;">
-        <h3>Artykuły</h3>
-        @foreach (var article in Model.Articles)
-        {
-            @Html.Partial("_ArticlesPartial", article)
-        }
-    </div>
-
-    <div class="col-md-6">
-        @foreach (var item in Model.Posts)
-        {
-            //render if post is main post
-            if (item.PostEntity_ID == null && !item.Removed)
+        <div class="col-md-6">
+            @foreach (var item in Model.Posts)
             {
-                <div class="row" style="margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;">
-                    @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser } })
-                </div>
+                //render if post is main post
+                if (item.PostEntity_ID == null && !item.Removed)
+                {
+                    <div class="row" style="margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;">
+                        @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser } })
+                    </div>
+                }
             }
-        }
 
-        <div id="posts">
+            <div id="posts">
+            </div>
+            <div id="loading" style="text-align: center; display: none;">
+                <img src="~/Storage/ajax-loader.gif" />
+            </div>
         </div>
-        <div id="loading" style="text-align: center; display: none;">
-            <img src="~/Storage/ajax-loader.gif" />
+        <div class="col-md-3" style="background-color: #465861; border-radius: 4px;">
+            <h3>Suchar codzienny</h3>
+            @foreach (var suchar in Model.Suchary)
+            {
+                @Html.Partial("_SucharPartial", suchar)
+            }
         </div>
-
+    </div>
+    <div class="row">
         @*pagination*@
         @{
             int currentPage = Convert.ToInt16(Request.Params["page"]);
@@ -98,7 +109,6 @@
             </div>
         }
     </div>
-    <div class="col-md-3"></div>
 </div>
 
 @section Scripts {

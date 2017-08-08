@@ -11,8 +11,8 @@
 <div id="mainPostId_@(Model.ID)">
     <div class="media mainPost" style="overflow: visible !important;">
         <input id="userAuth" type="hidden" value=@(User.Identity.IsAuthenticated) />
-        <div class="media-heading" style="text-align: left; margin-left: 5px; margin-top: 5px;">
-            <span>@Html.DisplayFor(m => m.ShortDescription)</span>
+        <div class="media-heading" style="text-align: left; margin-left: 10px; margin-top: 5px;">
+            <span class="postHeader">@Html.DisplayFor(m => m.ShortDescription)</span>
         </div>
         <div class="media-body imgPost" style="overflow: visible !important; text-align:center; position: relative; display: block;">
             @{
@@ -45,17 +45,17 @@
                             <div>
                                 @if (Request.Browser.IsMobileDevice)
                                 {
-                                    <img src="@Model.EmbedUrl" data-wait="true" style="width: 100%" />
+                                    <img src="@Model.EmbedUrl" data-wait="true" style="max-width: 450px;" />
                                 }
                                 else
                                 {
-                                    <img src="@Model.ReferenceUrl" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true"/>
+                                    <img src="@Model.ReferenceUrl" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true" style="max-width: 450px;"/>
                                 }
                             </div>
                         }
-                        else if (!string.IsNullOrWhiteSpace(Model.Url) && (Model.Url.ToLower().EndsWith(".jpg") 
-                                                                        || Model.Url.ToLower().EndsWith(".jpeg") 
-                                                                        || Model.Url.ToLower().EndsWith(".png") 
+                        else if (!string.IsNullOrWhiteSpace(Model.Url) && (Model.Url.ToLower().EndsWith(".jpg")
+                                                                        || Model.Url.ToLower().EndsWith(".jpeg")
+                                                                        || Model.Url.ToLower().EndsWith(".png")
                                                                         || Model.Url.ToLower().EndsWith(".bmp")))
                         {
                             <img src="@Model.Url" class="img-responsive" style="margin-left: auto; margin-right: auto;" />
@@ -65,21 +65,21 @@
                                                                             || Model.FilePath.ToLower().EndsWith(".png") 
                                                                             || Model.FilePath.ToLower().EndsWith(".bmp")))
                         {
-                            <img src="@Model.FilePath" data-wait="true" class="img-responsive" style="margin-left: auto; margin-right: auto;" />
+                            <img src="@Model.FilePath" data-wait="true" class="img-responsive" style="max-height: 500px; margin-left: auto; margin-right: auto;" />
                         }
 
-                        <div style="text-align: left; color:#B0B0B0; font-size: 11px">
+                        <div style="text-align: left; color:#B0B0B0; font-size: 11px; word-wrap: break-word;">
                             @if (!string.IsNullOrWhiteSpace(Model.Header))
                             {
                                 @Html.Label("źródło: ");
                                 @Html.DisplayFor(m => m.Header);
                             }
                         </div>
-                        <div style="text-align: right; color:#B0B0B0; font-size: 11px">
+                        @*<div style="text-align: right; color:#B0B0B0; font-size: 11px">
                             @if (Model.User != null && !string.IsNullOrWhiteSpace(Model.User.UserName))
                             { @Html.DisplayFor(m => m.User.UserName);
                             }
-                        </div>
+                        </div>*@
                     }
                 </div>
             </div>

@@ -48,6 +48,7 @@ namespace PlusAndComment.Models
         public virtual DbSet<PostEntity> Posts { get; set; }
         public virtual DbSet<UserPosts> UserPosts { get; set; }
         public virtual DbSet<ArticleEntity> Articles { get; set; }
+        public virtual DbSet<SucharEntity> Suchary { get; set; }
         public virtual DbSet<UserProfileSettings> UserProfileSettings { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -66,5 +67,7 @@ namespace PlusAndComment.Models
         }
 
         public System.Data.Entity.DbSet<PlusAndComment.Models.ArticleVM> ArticleVMs { get; set; }
+
+        public System.Data.Entity.DbSet<PlusAndComment.Models.SucharVM> SucharVMs { get; set; }
     }
 }

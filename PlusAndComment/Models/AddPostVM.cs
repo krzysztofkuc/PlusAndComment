@@ -11,5 +11,7 @@ namespace PlusAndComment.Models
         public string EmbedUrl { get; set; }
         public string ReferenceUrl { get; set; }
         public string Content { get; set; }
+
+        public SucharVM suchar { get; set; }
     }
 }

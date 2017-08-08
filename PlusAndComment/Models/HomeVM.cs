@@ -6,6 +6,7 @@ namespace PlusAndComment.Models
     {
         public ICollection<MainPostVM> Posts { get; set; }
         public ICollection<ArticleVM> Articles { get; set; }
+        public ICollection<SucharVM> Suchary { get; set; }
         public bool ShowNeedAgePics { get; set; }
         public int CurrentPage { get; set; }
         public int PostsCapacity { get; set; }

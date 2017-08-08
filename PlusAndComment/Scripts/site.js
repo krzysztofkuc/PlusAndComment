@@ -136,35 +136,9 @@ function CopyLinkClicked(obj)
     $('#infoCopied').delay(1500).slideToggle(false);
 }
 
-$(document).ready(function () {
-    //var win = $(window);
+$(".sucharThmb").click(function (e) {
 
-    //// Each time the user scrolls
-    //win.scroll(function () {
-    //    // End of the document reached?
-    //    if ($(document).height() - win.height() == win.scrollTop()) {
-    //        $('#loading').show();
-    //        var count = $(document).find('.row').length;
+    var idX = e.target.id.split("_")[1];
 
-    //        $.ajax({
-    //            url: '/Home/GetMoreMainPosts',
-    //            type: "Post",
-    //            dataType: 'json',
-    //            traditional: true,
-    //            data: { amount: count },
-    //            success: function (obj) {
-    //                var html = obj[0].Value;
-    //                var id = obj[1].Value;
-
-    //                $('#posts').append(html);
-    //                $('#loading').hide();
-    //                $('.gifplayer_' + id).gifplayer();
-    //                $('[data-toggle="tooltip"]').tooltip();
-    //            },
-    //            failure: function () {
-    //                $('#loading').hide();
-    //            }
-    //        });
-    //    }
-    //});
+    window.location.href = "Home/Suchar/" + idX;
 });

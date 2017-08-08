@@ -9,6 +9,6 @@ namespace PlusAndComment.Common
     public static class Enums
     {
         //leave it in the same order
-        public enum PostType {img, gif, mov };
+        public enum PostType {img, gif, mov};
     }
 }

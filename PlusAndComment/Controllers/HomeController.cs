@@ -40,6 +40,8 @@ namespace PlusAndComment.Controllers
             homeVm.Posts = AutoMapper.Mapper.Map<ICollection<PostEntity>,ICollection<MainPostVM>>(posts);
             var dbArticles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
             homeVm.Articles = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(dbArticles);
+            var dbSuchary = dbContext.Suchary.OrderByDescending(m => m.Id).ToList();
+            homeVm.Suchary = AutoMapper.Mapper.Map<ICollection<SucharEntity>, ICollection<SucharVM>>(dbSuchary);
 
             var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
@@ -85,7 +87,6 @@ namespace PlusAndComment.Controllers
             dbContext.Entry(articleEnt).State = EntityState.Added;
             dbContext.SaveChanges();
 
-
             return RedirectToAction("ManageArticles");
         }
 
@@ -127,6 +128,18 @@ namespace PlusAndComment.Controllers
                 return View(post);
             }
 
+            if (post.suchar.Content != null)
+            {
+                var sucharEnt = AutoMapper.Mapper.Map<SucharVM, SucharEntity>(post.suchar);
+                sucharEnt.AddedTime = DateTime.Now;
+                sucharEnt.RelThumbPath = SaveTextAsImage(post.suchar.Content);
+                post.Type = PostType.img;
+
+                dbContext.Suchary.Add(sucharEnt);
+                dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
             if (post.Url != null)
             {
                 System.Uri uri = new Uri(post.Url);
@@ -155,35 +168,44 @@ namespace PlusAndComment.Controllers
         {
             int numLines = content.Split('\n').Length;
             int numberOfCharacters = content.Length;
-            int fontSize = 26;
+            int fontSize = 35;
             int maxNumChar = 380;
             int maxNumLine = 10;
-            int y = 150;
-            int x = 175;
+            int y = 100;
+            int x = 135;
 
+            if (numLines < 7 || numberOfCharacters > maxNumChar)
+            {
+                fontSize = 40;
+            }
+
+            if (numLines > maxNumLine - 2 || numberOfCharacters > maxNumChar)
+            {
+                fontSize = 30;
+                y -= 50;
+            }
             if (numLines > maxNumLine || numberOfCharacters > maxNumChar)
             {
-                fontSize = 25;
-                y -= 50;
+                fontSize = 27;
+                y -= 40;
             }
             if (numLines > maxNumLine + 4 || numberOfCharacters > maxNumChar + 200)
             {
-                y -= 50;
-                fontSize = 23;
+                fontSize = 25;
             }
 
             var pathX = Server.MapPath("~/Storage/textBckg.bmp");
             Image imgX = Image.FromFile(pathX);
             Bitmap bmp = new Bitmap(imgX);
 
-            RectangleF rectf = new RectangleF(x, y, 950, 560);
+            RectangleF rectf = new RectangleF(x, y, 1000, 760);
 
             Graphics g = Graphics.FromImage(bmp);
 
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.DrawString(content, new Font("Tahoma", fontSize), Brushes.White, rectf);
+            g.DrawString(content, new Font("Tahoma", fontSize, FontStyle.Bold), Brushes.White, rectf);
             g.Flush();
 
             Image img = bmp;
@@ -680,6 +702,17 @@ namespace PlusAndComment.Controllers
             var post = dbContext.Posts.Find(id);
 
             var postMapped = AutoMapper.Mapper.Map<MainPostVM>(post);
+
+            return View(postMapped);
+        }
+
+        [HttpGet]
+        public ActionResult Suchar(int id)
+        {
+            SucharVM homeVm = new SucharVM();
+            var post = dbContext.Suchary.Find(id);
+
+            var postMapped = AutoMapper.Mapper.Map<SucharVM>(post);
 
             return View(postMapped);
         }

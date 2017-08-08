@@ -1,5 +1,16 @@
 ﻿@import url(http://weloveiconfonts.com/api/?family=entypo);
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
+h1 h2 h3 h4{
+    color: #161616;
+}
+
+a{
+    color: #192023
+}
+
+a:hover{
+    color: #FF8F2E
+}
 
 body {
     padding-top: 50px;
@@ -579,4 +590,14 @@ input[type="file"] {
    left: 80px;
    top: 10px;
    z-index:1;
+}
+
+.postHeader{
+    font-weight: bold; 
+    font-size: 18px;
+}
+
+.sucharThmb:hover
+{
+    cursor: pointer;
 }
