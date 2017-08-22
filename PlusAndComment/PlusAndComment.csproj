@@ -240,6 +240,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AddPostVM.cs" />
+    <Compile Include="Models\ArticlesVM.cs" />
     <Compile Include="Models\ArticleVM.cs" />
     <Compile Include="Models\ConfrimEmailVM.cs" />
     <Compile Include="Models\Entities\ArticleEntity.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MenageRolesVM.cs" />
     <Compile Include="Models\PostDetailsVM.cs" />
+    <Compile Include="Models\FrameVM.cs" />
     <Compile Include="Models\RolaVM.cs" />
     <Compile Include="Models\UserProfileSettingsVM.cs" />
     <Compile Include="Models\UserVM.cs" />
@@ -536,6 +538,9 @@
     <Content Include="Views\Shared\_ArticlesPartial.cshtml" />
     <Content Include="Views\Shared\_SucharPartial.cshtml" />
     <Content Include="Views\Home\Suchar.cshtml" />
+    <Content Include="Views\Home\Frame.cshtml" />
+    <Content Include="Views\Home\Articles.cshtml" />
+    <Content Include="Views\Shared\_ArticleRowPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

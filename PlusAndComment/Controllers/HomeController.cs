@@ -65,11 +65,14 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpGet]
-        public ActionResult ManageArticles ()
+        public ActionResult Articles()
         {
             var articles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
             List<ArticleVM> mapedArt = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(articles).ToList();
-            return View(mapedArt);
+
+            var articlesVM = new ArticlesVM();
+            articlesVM.Articles = mapedArt;
+            return View(articlesVM);
         }
 
         [HttpGet]
@@ -171,10 +174,10 @@ namespace PlusAndComment.Controllers
             int fontSize = 35;
             int maxNumChar = 380;
             int maxNumLine = 10;
-            int y = 100;
-            int x = 135;
+            int y = 50;
+            int x = 70;
 
-            if (numLines < 7 || numberOfCharacters > maxNumChar)
+            if (numLines < 7)
             {
                 fontSize = 40;
             }
@@ -182,37 +185,44 @@ namespace PlusAndComment.Controllers
             if (numLines > maxNumLine - 2 || numberOfCharacters > maxNumChar)
             {
                 fontSize = 30;
-                y -= 50;
+                y -= 25;
             }
             if (numLines > maxNumLine || numberOfCharacters > maxNumChar)
             {
                 fontSize = 27;
-                y -= 40;
+                y -= 20;
             }
             if (numLines > maxNumLine + 4 || numberOfCharacters > maxNumChar + 200)
             {
                 fontSize = 25;
             }
 
-            var pathX = Server.MapPath("~/Storage/textBckg.bmp");
-            Image imgX = Image.FromFile(pathX);
-            Bitmap bmp = new Bitmap(imgX);
+            var pathX = Server.MapPath("~/Storage/textBckg.png");
+            Image img = Image.FromFile(pathX);
+            //Bitmap bmp = new Bitmap(imgX);
 
-            RectangleF rectf = new RectangleF(x, y, 1000, 760);
+            RectangleF rectf = new RectangleF(x, y, 800, 560);
 
-            Graphics g = Graphics.FromImage(bmp);
+            Graphics g = Graphics.FromImage(img);
+            //Graphics gThm = Graphics.FromImage(img);
+            //gThm.DrawImage(img,0,0, 270, 180);
+
+            
 
             g.SmoothingMode = SmoothingMode.AntiAlias;
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.DrawString(content, new Font("Tahoma", fontSize, FontStyle.Bold), Brushes.White, rectf);
+
+            //var gThm = Graphics.FromImage
+
+
             g.Flush();
 
-            Image img = bmp;
-            ImageCodecInfo bmpCodec = GetEncoderInfo("image/bmp");
+            ImageCodecInfo bmpCodec = GetEncoderInfo("image/png");
             EncoderParameters parameters = new EncoderParameters();
             parameters.Param[0] = new EncoderParameter(System.Drawing.Imaging.Encoder.ColorDepth, 32);
-            var newPath = CheckIffILExist(Server.MapPath("~/Storage/") + "joke.bmp");
+            var newPath = CheckIffILExist(Server.MapPath("~/Storage/") + "joke.png");
             img.Save(newPath, bmpCodec, parameters);
 
             return Path.Combine("..\\Storage", Path.GetFileName(newPath));

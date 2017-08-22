@@ -55,6 +55,9 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<ArticleEntity, ArticleVM>()
                 .ForMember(m => m.Url, opt => opt.MapFrom(c => c.Url));
 
+                cfg.CreateMap<SucharEntity, SucharVM>();
+                cfg.CreateMap<SucharVM, SucharEntity>();
+
 
                 //cfg.CreateMap<ICollection<PostEntity>, ICollection<MainPostVM>>();
                 //cfg.CreateMap< ICollection <MainPostVM>, ICollection <PostEntity>>();
