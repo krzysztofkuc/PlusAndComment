@@ -6,7 +6,7 @@
                 <div class="caption">
             <h4>@Html.DisplayFor(m => m.Header)</h4>
                     <div style="color: #b8c5cc;">
-                        @if (Model.LongDesc.Length > 200)
+                        @if (Model.LongDesc != null && Model.LongDesc.Length > 200)
                         {
                             @Model.LongDesc.Substring(0, 200)
                         }

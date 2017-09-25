@@ -139,6 +139,7 @@ namespace PlusAndComment.Controllers
                 post.Type = PostType.img;
 
                 dbContext.Suchary.Add(sucharEnt);
+
                 dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }

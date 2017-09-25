@@ -108,6 +108,7 @@
                         <input type="file" id="imageUploadForm" class="custom-file-upload " />
                         &nbsp;<label id="WriteTextBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-font" aria-hidden="true"></span>&nbsp;Tekst | </label>
                         <label id="AddSucharBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Suchar</label>
+                        <label id="AddArticleBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Artykuł</label>
                     </div>
                     <hr style="margin-top: 50px; margin-bottom: 0">
                     <div>
@@ -127,13 +128,16 @@
                         @Html.TextAreaFor(model => model.ShortDescription, new { @class = "input", id = "ContentDescription", style = "max-width: 100%; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Dodaj opis" })
                         <hr style="margin: 0 0 0 0">
                     </div>
+                    <div id="CreateArticle" style="display: none;">
+                        @{ Html.RenderPartial("CreateArticle", Model.Article);  }
+                    </div>
                     <div id="AddNewPostContent" style="display: none">
                         <img id="loadingPageThumb" src="~/Storage/ajax-loader.gif" style="display: none; max-width: 20px; max-height: 20px; margin-top: 20px;" />
                         <div id="imageShortDesc" style="display: inline-grid"></div>
                         @{
                             if (!string.IsNullOrWhiteSpace(Model.Url) && 
-                                        (Model.Url.Contains("youtube") || 
-                                Model.Url.Contains("www.facebook.com") || 
+                                        (Model.Url.Contains("youtube") ||
+                                Model.Url.Contains("www.facebook.com") ||
                                   Model.Url.Contains("dailymotion.com")))
                             {
                                 <iframe id="movieThumb" width="470" height="365" src="@Model.Url" frameborder="0" allowfullscreen style="max-width: 100%;"></iframe>
@@ -147,7 +151,7 @@
                             }
                             else if (!string.IsNullOrWhiteSpace(Model.Url) && 
                                      (Model.Url.ToLower().EndsWith(".jpg") ||
-                                     Model.Url.ToLower().EndsWith(".jpeg") || 
+                                     Model.Url.ToLower().EndsWith(".jpeg") ||
                                      Model.Url.ToLower().EndsWith(".png")))
                             {
                                 <img src="@Model.Url" data-wait="true" />
@@ -162,14 +166,16 @@
                         </div>
                         <div id="imageTitle" style="display: inline-block"></div>
                     </div>
-                    <div class="pull-right">
-                        <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
-                        <input id="addPostButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
-                    </div>
-                    <div class="text-left" style="color: #b73434; max-width: 30px; padding-left: 20px">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.NeedAge)
-                            @Html.DisplayNameFor(m => m.NeedAge)
+                    <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
+                    <div id="confirmButtonsAddPost">
+                        <div class="pull-right">
+                            <input id="addPostButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+                        </div>
+                        <div class="text-left" style="color: #b73434; max-width: 30px; padding-left: 20px">
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(m => m.NeedAge)
+                                @Html.DisplayNameFor(m => m.NeedAge)
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,43 +207,53 @@
         contentLinkChanged(elem.val())
     }
 
+    function hideBottomBtnsAddPost()
+    {
+        $("#confirmButtonsAddPost").hide();
+    }
+
+    function showBottomBtnsAddPost() {
+        $("#confirmButtonsAddPost").show();
+    }
+
+    $('#AddArticleBtn').click(function () {
+        hideContentCtrls();
+        hideBottomBtnsAddPost();
+        $("#CreateArticle").show();
+    });
+
     $('#AddSucharBtn').click(function () {
-        $(".contentText").val("");
-        $(".contentLink").val("");
-        $("#ContentDescription").val("");
-        $(".contentLink").hide();
-        $(".contentText").hide();
-        $("#ContentDescription").hide();
+        hideContentCtrls();
+        showBottomBtnsAddPost();
         $("#contentSuchar").show();
     });
 
     $('#imageUploadForm').click(function () {
-            $(".contentText").val("");
-            $(".contentLink").val("");
-            $(".contentLink").hide();
-            $(".contentText").hide();
-            $("#contentSuchar").hide();
-            $("#ContentDescription").hide();
+        hideContentCtrls();
+        showBottomBtnsAddPost();
         });
 
-        $('#LoadLinkBtn').click(function () {
-            $(".contentText").hide();
-            $(".contentText").val("");
-            $(".contentLink").show();
-            $("#contentSuchar").hide();
-            $("#contentSuchar").val("");
-            $("#ContentDescription").show();
-        });
+    $('#LoadLinkBtn').click(function () {
+        hideContentCtrls();
+        showBottomBtnsAddPost();
+        $("#ContentDescription").show();
+        $(".contentLink").show();
+    });
 
-        $('#WriteTextBtn').click(function () {
-            $(".contentLink").hide();
-            $("#ContentDescription").hide();
-            $("#contentSuchar").hide();
-            $("#contentSuchar").val("");
-            $(".contentLink").val("");
-            $(".contentText").show();
-            $('#addPostButton').attr("disabled", false);
+    $('#WriteTextBtn').click(function () {
+        hideContentCtrls();
+        showBottomBtnsAddPost();
+        $(".contentText").show();
+        $('#addPostButton').attr("disabled", false);
+    });
+
+    function hideContentCtrls() {
+        var contentCtrls = [".contentText", ".contentLink", "#ContentDescription", "#contentSuchar", "#CreateArticle"];
+        $.each(contentCtrls, function (i, val) {
+            $(val).hide();
+            $(val).val("");
         });
+    }
 
         function contentLinkChanged(value) {
             $.ajax({
@@ -291,6 +307,12 @@
         }
 
         $(document).ready(function () {
+
+            hideContentCtrls();
+            $(".contentLink").show();
+            $("#ContentDescription").show();
+
+
         $("#imageUploadForm").change(function () {
             var formData = new FormData();
             var totalFiles = document.getElementById("imageUploadForm").files.length;
