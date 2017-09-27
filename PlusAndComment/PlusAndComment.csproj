@@ -540,6 +540,7 @@
     <Content Include="Views\Home\Frame.cshtml" />
     <Content Include="Views\Home\Articles.cshtml" />
     <Content Include="Views\Shared\_ArticleRowPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_PostPreviewPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

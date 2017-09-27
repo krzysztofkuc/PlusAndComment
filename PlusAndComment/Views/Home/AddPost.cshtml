@@ -84,13 +84,12 @@
         }
     </style>
 </head>
-    @using (Html.BeginForm("AddPost","Home", FormMethod.Post, new { id = "addPostForm" }))
-    {
         @Html.HiddenFor(m => m.Header, new {id = "imageSourceHeader"})
         @Html.HiddenFor(m => m.FilePath, new { id = "filePath" })
         @Html.HiddenFor(m => m.Type, new { id = "postType" })
         @Html.HiddenFor(m => m.EmbedUrl, new { id = "embedUrl" })
         @Html.HiddenFor(m => m.ReferenceUrl, new { id = "referenceUrl" })
+        @Html.HiddenFor(m => m.ID, new { id = "idPost" })
 
         @Html.AntiForgeryToken()
 
@@ -100,7 +99,86 @@
             @Html.ValidationSummary(true)
             <div style="text-align: center;">
                 <div id="AddNewPost" class="center" style="padding: 20px 20px 20px 20px;">
-                    <div style="float: left;">
+
+                    <!-- Zakładki -->
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#1zakladka" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;Link</a></li>
+                        <li><a href="#2zakladka" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie</a></li>
+                        <li><a href="#3zakladka" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-font" aria-hidden="true"></span>&nbsp;Tekst </a></li>
+                        <li><a href="#4zakladka" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Suchar</a></li>
+                        <li><a href="#5zakladka" role="tab" data-toggle="tab"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Artykuł</a></li>
+                    </ul>
+
+                    <!-- Zawartość zakładek -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="1zakladka">
+                            <div style="padding: 15px 15px 15px 15px">
+                                @*<hr style="margin-top: 50px; margin-bottom: 0">*@
+                            @using (Html.BeginForm("AddPostLink", "Home", FormMethod.Post))
+                            {
+                                <div>
+                                    @Html.TextAreaFor(model => model.Url, new { @class = "input contentLink", style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px;", placeholder = "Wklej link" })
+                                    @Html.ValidationMessageFor(model => model.Url)
+                                </div>
+                                <hr style="margin-top: 1px; margin-bottom: 1px">
+                                <div>
+                                    @Html.TextAreaFor(model => model.ShortDescription, new { @class = "input", id = "ContentDescription", style = "max-width: 100%; border-style: none; padding-left: 15px; margin-top: 15px;", placeholder = "Dodaj opis" })
+                                    <hr style="margin: 0 0 0 0">
+                                </div>
+                                <hr style="margin: 0 0 0 0">
+                                { Html.RenderPartial("~\\Views\\Home\\AddPost\\Partials\\_PostPreviewPartial.cshtml", Model, new ViewDataDictionary() { { "id", "AddLinkPreview" } }); }
+                                <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
+                                <div class="text-right">
+                                    <div style="display: inline-block; color: #b73434; max-width: 30px;">
+                                        <div class="checkbox">
+                                            @Html.CheckBoxFor(m => m.NeedAge)
+                                            @Html.DisplayNameFor(m => m.NeedAge)
+                                        </div>
+                                    </div>
+                                    <input id="addPostButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+                                </div>
+                            }
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="2zakladka">
+                            <div style="padding: 10px 10px 10px 10px">
+                            @using (Html.BeginForm("AddPostPicture", "Home", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(m => m.ReferenceUrl, new { id = "referenceUrl" })
+                                <div>
+                                    @Html.TextAreaFor(model => model.ShortDescription, new { @class = "input", id = "ContentDescription", style = "max-width: 100%; border-style: none; padding-left: 15px; margin-top: 15px;", placeholder = "Dodaj opis" })
+                                    <hr style="margin: 0 0 0 0">
+                                </div>
+                                <label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn">
+                                    <i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie
+                                </label>
+                                <input type="file" id="userImageUploadForm" class="custom-file-upload " />
+                                Html.RenderPartial("~\\Views\\Home\\AddPost\\Partials\\_PostPreviewPartial.cshtml", Model, new ViewDataDictionary() { { "id", "UserPhotoPreview" } });
+                                <div class="text-right">
+                                    <input id="addPostLinkButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
+                                </div>
+                             }
+                                <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="3zakladka">
+                            <div>
+                                @Html.TextAreaFor(model => model.suchar.Content, new { @class = "input contentText", @id = "contentSuchar", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px;", placeholder = "Wpisz tekst" })
+                                @Html.ValidationMessageFor(model => model.suchar.Content)
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="4zakladka">
+                            <div>
+                                @Html.TextAreaFor(model => model.Content, new { @class = "input contentText", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px;", placeholder = "Wpisz tekst" })
+                                @Html.ValidationMessageFor(model => model.Content)
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="5zakladka">
+                            @{ Html.RenderPartial("CreateArticle", Model.Article);  }
+                        </div>
+                    </div>
+                
+                    @*<div style="float: left;">
                         <label id="LoadLinkBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;Link</label>
                         &nbsp;<label for="imageUploadForm" class="custom-file-upload normalBtn btn">
                             <i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie
@@ -109,65 +187,8 @@
                         &nbsp;<label id="WriteTextBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-font" aria-hidden="true"></span>&nbsp;Tekst | </label>
                         <label id="AddSucharBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Suchar</label>
                         <label id="AddArticleBtn" class="normalBtn btn" style="display: inline-block"><span class="glyphicon glyphicon-fire" aria-hidden="true"></span>&nbsp;Artykuł</label>
-                    </div>
-                    <hr style="margin-top: 50px; margin-bottom: 0">
-                    <div>
-                        @Html.TextAreaFor(model => model.Url, new { @class = "input contentLink", style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Wklej link" })
-                        @Html.ValidationMessageFor(model => model.Url)
-                    </div>
-                    <div>
-                        @Html.TextAreaFor(model => model.Content, new { @class = "input contentText", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Wpisz tekst" })
-                        @Html.ValidationMessageFor(model => model.Content)
-                    </div>
-                    <div>
-                        @Html.TextAreaFor(model => model.suchar.Content, new { @class = "input contentText", @id = "contentSuchar", @rows = 6, style = "max-width: 498px !important; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Wpisz tekst" })
-                        @Html.ValidationMessageFor(model => model.suchar.Content)
-                    </div>
-                    <div>
-                        <hr style="margin: 0 0 0 0">
-                        @Html.TextAreaFor(model => model.ShortDescription, new { @class = "input", id = "ContentDescription", style = "max-width: 100%; border-style: none; padding-left: 15px; margin-top: 15px; display: none", placeholder = "Dodaj opis" })
-                        <hr style="margin: 0 0 0 0">
-                    </div>
-                    <div id="CreateArticle" style="display: none;">
-                        @{ Html.RenderPartial("CreateArticle", Model.Article);  }
-                    </div>
-                    <div id="AddNewPostContent" style="display: none">
-                        <img id="loadingPageThumb" src="~/Storage/ajax-loader.gif" style="display: none; max-width: 20px; max-height: 20px; margin-top: 20px;" />
-                        <div id="imageShortDesc" style="display: inline-grid"></div>
-                        @{
-                            if (!string.IsNullOrWhiteSpace(Model.Url) && 
-                                        (Model.Url.Contains("youtube") ||
-                                Model.Url.Contains("www.facebook.com") ||
-                                  Model.Url.Contains("dailymotion.com")))
-                            {
-                                <iframe id="movieThumb" width="470" height="365" src="@Model.Url" frameborder="0" allowfullscreen style="max-width: 100%;"></iframe>
-                            }
-                            else if (!string.IsNullOrWhiteSpace(Model.Url) && Model.Url.ToLower().EndsWith(".gif"))
-                            {
-                                <img src="@Model.Url" />
-                                <div style="text-align: left; color:#B0B0B0; font-size: 11px">
-                                    źródło:@Html.DisplayFor(m => m.Header)
-                                </div>
-                            }
-                            else if (!string.IsNullOrWhiteSpace(Model.Url) && 
-                                     (Model.Url.ToLower().EndsWith(".jpg") ||
-                                     Model.Url.ToLower().EndsWith(".jpeg") ||
-                                     Model.Url.ToLower().EndsWith(".png")))
-                            {
-                                <img src="@Model.Url" data-wait="true" />
-                                <div style="text-align: left; color:#B0B0B0; font-size: 11px">
-                                    źródło:@Html.DisplayFor(m => m.Header)
-                                </div>
-                            }
-                        }
-                        <div>
-                            <img id="imageThumb" src="" style="width: 100% !important"/>
-                            <iframe id="movieThumb" width="420" height="315" src="" frameborder="0" allowfullscreen style="display: none"></iframe>
-                        </div>
-                        <div id="imageTitle" style="display: inline-block"></div>
-                    </div>
-                    <img id="loadingAddPostButton" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
-                    <div id="confirmButtonsAddPost">
+                    </div>*@
+                    @*<div id="confirmButtonsAddPost">
                         <div class="pull-right">
                             <input id="addPostButton" type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
                         </div>
@@ -177,23 +198,23 @@
                                 @Html.DisplayNameFor(m => m.NeedAge)
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>
-    }
+    
 
     <div>
         @Html.ActionLink("Wróć do strony głównej", "Index")
     </div>
 
 <script>
-    $(function () {
-        $("#addPostForm").submit(function (event) {
-            $("#addPostButton").hide();
-            $("#loadingAddPostButton").show();
-        });
-    });
+    //$(function () {
+    //    $("#addPostForm").submit(function (event) {
+    //        $("#addPostButton").hide();
+    //        $("#loadingAddPostButton").show();
+    //    });\
+    //});
 
     $('.contentLink').on('paste', function (event) {
         var self = $(this);
@@ -214,45 +235,6 @@
 
     function showBottomBtnsAddPost() {
         $("#confirmButtonsAddPost").show();
-    }
-
-    $('#AddArticleBtn').click(function () {
-        hideContentCtrls();
-        hideBottomBtnsAddPost();
-        $("#CreateArticle").show();
-    });
-
-    $('#AddSucharBtn').click(function () {
-        hideContentCtrls();
-        showBottomBtnsAddPost();
-        $("#contentSuchar").show();
-    });
-
-    $('#imageUploadForm').click(function () {
-        hideContentCtrls();
-        showBottomBtnsAddPost();
-        });
-
-    $('#LoadLinkBtn').click(function () {
-        hideContentCtrls();
-        showBottomBtnsAddPost();
-        $("#ContentDescription").show();
-        $(".contentLink").show();
-    });
-
-    $('#WriteTextBtn').click(function () {
-        hideContentCtrls();
-        showBottomBtnsAddPost();
-        $(".contentText").show();
-        $('#addPostButton').attr("disabled", false);
-    });
-
-    function hideContentCtrls() {
-        var contentCtrls = [".contentText", ".contentLink", "#ContentDescription", "#contentSuchar", "#CreateArticle"];
-        $.each(contentCtrls, function (i, val) {
-            $(val).hide();
-            $(val).val("");
-        });
     }
 
         function contentLinkChanged(value) {
@@ -307,12 +289,6 @@
         }
 
         $(document).ready(function () {
-
-            hideContentCtrls();
-            $(".contentLink").show();
-            $("#ContentDescription").show();
-
-
         $("#imageUploadForm").change(function () {
             var formData = new FormData();
             var totalFiles = document.getElementById("imageUploadForm").files.length;
@@ -323,22 +299,22 @@
             }
             $.ajax({
                 type: "POST",
-                url: '/Home/Upload',
+                url: "@Url.Action("Index", "Home")",
                 data: formData,
                 dataType: 'json',
                 contentType: false,
                 processData: false,
                 success: function (post) {
-                    var type = post[0].Value;
-                    var gifUrl = post[1].Value;
-                    var imgUrl = post[2].Value;
-                    var referenceUrl = post[3].Value;
+                    var type = post.Type;
+                    var gifUrl = post.postUrl;
+                    var imgUrl = post.ImageUrl;
+                    var referenceUrl = post.ReferenceUrl;
                     $("#postType").val(type);
 
                     if (type == "gif") {
-                        $("#imageThumb").attr("src", gifUrl);
+                        $("#imageThumb_AddLinkPreview").attr("src", gifUrl);
                     }
-                    else {$("#imageThumb").attr("src", referenceUrl);}
+                    else { $("#imageThumb_AddLinkPreview").attr("src", referenceUrl); }
 
                     $('#filePath').val(gifUrl);
                     $("#embedUrl").val(gifUrl);
@@ -351,5 +327,45 @@
                 }
             });
         });
-    });
+        });
+
+        $(document).ready(function () {
+            $("#userImageUploadForm").change(function () {
+                var formData = new FormData();
+                var totalFiles = document.getElementById("userImageUploadForm").files.length;
+                for (var i = 0; i < totalFiles; i++) {
+                    var file = document.getElementById("userImageUploadForm").files[i];
+                    formData.append("userImageUploadForm", file);
+                }
+                $.ajax({
+                    type: "POST",
+                    url: '/Home/Upload',
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    success: function (post) {
+                        var type = post.Type;
+                        var gifUrl = post.postUrl;
+                        var imgUrl = post.ImageUrl;
+                        var referenceUrl = post.ReferenceUrl;
+                        $("#postType").val(type);
+
+                        if (type == "gif") {
+                            $("#imageThumb_UserPhotoPreview").attr("src", gifUrl);
+                        }
+                        else { $("#imageThumb_UserPhotoPreview").attr("src", referenceUrl); }
+
+                        $('#filePath').val(gifUrl);
+                        $("#embedUrl").val(gifUrl);
+                        $("#referenceUrl").val(referenceUrl);
+                        $("#AddNewPostContent").show();
+                        $('#addPostButton').attr("disabled", false);
+                    },
+                    error: function (error) {
+                        alert("errror");
+                    }
+                });
+            });
+        });
 </script>

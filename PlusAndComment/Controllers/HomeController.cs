@@ -123,6 +123,54 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpPost]
+        [AjaxAuthorize]
+        public ActionResult AddPostLink(AddPostVM post)
+        {
+            if (post.Url != null)
+            {
+                System.Uri uri = new Uri(post.Url);
+
+                // po co to jest ?
+                if (!post.Url.Contains("youtube") && !string.IsNullOrWhiteSpace(uri.Query))
+                {
+                    post.Url = uri.AbsoluteUri.Replace(uri.Query, string.Empty);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(post.Content))
+            {
+                post.FilePath = SaveTextAsImage(post.Content);
+                post.Type = PostType.img;
+            }
+
+            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
+            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+
+            dbContext.Posts.Add(postEntity);
+            dbContext.SaveChanges();
+            return RedirectToAction("Index", dbContext.Posts.ToList());
+
+        }
+
+        [HttpPost]
+        [AjaxAuthorize]
+        public ActionResult AddPostPicture(AddPostVM post)
+        {
+            SavePost(post);
+            return RedirectToAction("Index", dbContext.Posts.ToList());
+        }
+
+        private int SavePost(AddPostVM post)
+        {
+            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
+            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+            dbContext.Posts.Add(postEntity);
+            dbContext.SaveChanges();
+
+            return post.ID;
+        }
+
+        [HttpPost]
         [Authorize]
         public ActionResult AddPost(AddPostVM post)
         {
@@ -154,6 +202,7 @@ namespace PlusAndComment.Controllers
                 }
             }
 
+            //Dowcip
             if (!string.IsNullOrWhiteSpace(post.Content))
             {
                 post.FilePath = SaveTextAsImage(post.Content);
@@ -248,7 +297,7 @@ namespace PlusAndComment.Controllers
         {
             return View(new AddPostVM());
         }
-
+        
         [HttpPost]
         [AjaxAuthorize]
         public JsonResult AddPlusToPostAsync(int id)
@@ -373,7 +422,7 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public JsonResult Upload()
         {
-            dynamic post = new ExpandoObject();
+            AddPostVM post = new AddPostVM();
             string pathUrl = string.Empty;
 
             for (int i = 0; i < Request.Files.Count; i++)
@@ -388,7 +437,7 @@ namespace PlusAndComment.Controllers
                     var savefileName = Path.GetFileName(file.FileName);
                     var savePath = Path.Combine(Server.MapPath("~/Storage"), savefileName);
                     file.SaveAs(savePath);
-                    post.postType = "img";
+                    post.Type = PostType.img;
                     post.FilePath = pathUrl;
                     post.ReferenceUrl = string.Empty;
                     if (ext == ".gif")
@@ -401,7 +450,7 @@ namespace PlusAndComment.Controllers
                         string pngFile = Path.ChangeExtension(savePath, "png");
                         string pngUrl = Path.ChangeExtension(pathUrl, "png");
                         post.EmbedUrl = pngUrl;
-                        post.postType = "gif";
+                        post.Type = PostType.gif;
                         post.ReferenceUrl = pngUrl;
 
                         var newName = CheckIffILExist(pngFile);
@@ -410,7 +459,9 @@ namespace PlusAndComment.Controllers
                     }
                 }
 
-                post.Path = pathUrl;
+                post.FilePath = pathUrl;
+
+                var id = SavePost(post);
 
                 return Json(post, JsonRequestBehavior.AllowGet);
             }
