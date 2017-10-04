@@ -3856,6 +3856,14 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .tab-content > .tab-pane {
   display: none;
   visibility: hidden;
+  border-width: 0.5px;
+  border-bottom: solid;
+  border-left: solid;
+  border-right: solid;
+  border-color: white;
+  border-bottom-width: thin;
+  border-right-width: thin;
+  border-left-width: thin;
 }
 .tab-content > .active {
   display: block;

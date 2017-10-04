@@ -125,10 +125,10 @@
             <a href="#" class="btn-sm btn-labeled btn-success-pc" id="showLeaveFirstCommentButton_@(Model.ID)" onclick="return showleaveComment(@(Model.ID),@(User.Identity.IsAuthenticated.ToString().ToLower()))">komentarz <i class='glyphicon glyphicon-chevron-down' style="padding-top: 10px"></i></a>
         }
 
-        <div class="pull-right">
+        @*<div class="pull-right">
             <div class="fb-send " style="display: inline-block" data-href="/Home/SingleMainPost/@(Model.ID)"></div>
             <div class="fb-share-button" style="padding-top:5px; position: relative; display: inline-block" data-href="/Home/SingleMainPost/@(Model.ID)" data-layout="button" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="/Home/SingleMainPost/@(Model.ID)">Udostępnij</a></div>
-        </div>
+        </div>*@
 
         <div id="leaveCommentPartial_@(Model.ID)" style="display: none">
             @Html.Action("LeaveComment", new { id = Model.ID })

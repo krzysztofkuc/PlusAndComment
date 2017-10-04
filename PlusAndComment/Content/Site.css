@@ -192,9 +192,6 @@ img {
 
 #AddNewPost {
     width: 500px !important;
-    border: 1px;
-    border-style: solid;
-    border-color: lightgrey;
 }
 
 #loadingPageThumb {
@@ -601,3 +598,94 @@ input[type="file"] {
 {
     cursor: pointer;
 }
+
+textarea{
+    background-color: #E6EAEB !important;
+    width: 100%;
+    max-width: 100%;
+    color: black;
+}
+
+.form-control{
+    background-color: #E6EAEB !important;
+}
+
+.btn-orange {
+    border: solid;
+    border-width: 1px;
+}
+
+/*==================== AddPost=================================*/
+        img {
+            max-height: 500px;
+            max-width: 500px;
+            height: auto;
+            width: auto;
+        }
+
+        .contentLink {
+            width: 100%;
+        }
+
+         .contentText {
+            width: 100%;
+        }
+
+        /*#ContentDescription {
+            width: 900px;
+            max-width: 100%; 
+            border-style: none; 
+            padding-left: 15px; 
+            margin-top: 15px;
+        }*/
+
+        #loadingPageThumb {
+            width: 40px;
+            height: 40px;
+        }
+
+        .center {
+            float: none;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .normalBtn:hover {
+            background-color: aliceblue;
+            cursor: pointer;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+        .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+        }
+
+        .nav-tabs > li > a {
+            background-color: #5A707C !important;
+        }
+        .tab-content{
+            background-color: #5A707C !important;
+        }
+
+        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+            color: #2D383E;
+        }
+
+        .nav-tabs > li > a {
+            border: none;
+            color: #D4D4D4;
+        }
+
+         .nav-tabs > li > a:hover {
+            border: none;
+            color: white;
+        }
+
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+            color: white;
+        }
+        /*==============================================================================*/

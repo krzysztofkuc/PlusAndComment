@@ -533,7 +533,6 @@
     <Content Include="Views\Shared\_ShowAllCommentsPartial.cshtml" />
     <Content Include="Views\Home\SingleMainPost.cshtml" />
     <Content Include="Views\Home\ManageArticles.cshtml" />
-    <Content Include="Views\Home\CreateArticle.cshtml" />
     <Content Include="Views\Shared\_ArticlesPartial.cshtml" />
     <Content Include="Views\Shared\_SucharPartial.cshtml" />
     <Content Include="Views\Home\Suchar.cshtml" />

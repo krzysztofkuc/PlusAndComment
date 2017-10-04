@@ -78,19 +78,14 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult CreateArticle()
         {
-            return View(new ArticleVM());
-        }
-
-        [HttpPost]
-        public ActionResult CreateArticle(ArticleVM article)
-        {
+            var article  = TempData["article"] as ArticleVM;
             var articleEnt = AutoMapper.Mapper.Map<ArticleVM, ArticleEntity>(article);
             articleEnt.AddedTime = DateTime.Now;
             dbContext.Articles.Add(articleEnt);
             dbContext.Entry(articleEnt).State = EntityState.Added;
             dbContext.SaveChanges();
 
-            return RedirectToAction("ManageArticles");
+            return RedirectToAction("Index");
         }
 
         private ICollection<MainPostVM> JoinPostsWithUsers(ICollection<MainPostVM> posts)
@@ -122,53 +117,6 @@ namespace PlusAndComment.Controllers
             return View();
         }
 
-        [HttpPost]
-        [AjaxAuthorize]
-        public ActionResult AddPostLink(AddPostVM post)
-        {
-            if (post.Url != null)
-            {
-                System.Uri uri = new Uri(post.Url);
-
-                // po co to jest ?
-                if (!post.Url.Contains("youtube") && !string.IsNullOrWhiteSpace(uri.Query))
-                {
-                    post.Url = uri.AbsoluteUri.Replace(uri.Query, string.Empty);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(post.Content))
-            {
-                post.FilePath = SaveTextAsImage(post.Content);
-                post.Type = PostType.img;
-            }
-
-            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
-            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
-
-            dbContext.Posts.Add(postEntity);
-            dbContext.SaveChanges();
-            return RedirectToAction("Index", dbContext.Posts.ToList());
-
-        }
-
-        [HttpPost]
-        [AjaxAuthorize]
-        public ActionResult AddPostPicture(AddPostVM post)
-        {
-            SavePost(post);
-            return RedirectToAction("Index", dbContext.Posts.ToList());
-        }
-
-        private int SavePost(AddPostVM post)
-        {
-            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
-            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
-            dbContext.Posts.Add(postEntity);
-            dbContext.SaveChanges();
-
-            return post.ID;
-        }
 
         [HttpPost]
         [Authorize]
@@ -177,6 +125,12 @@ namespace PlusAndComment.Controllers
             if (!ModelState.IsValid)
             {
                 return View(post);
+            }
+
+            if(post.Tab == "5zakladka")
+            {
+                TempData["article"] = post.Article;
+                return RedirectToAction("CreateArticle");
             }
 
             if (post.suchar.Content != null)
@@ -202,7 +156,6 @@ namespace PlusAndComment.Controllers
                 }
             }
 
-            //Dowcip
             if (!string.IsNullOrWhiteSpace(post.Content))
             {
                 post.FilePath = SaveTextAsImage(post.Content);
@@ -297,7 +250,7 @@ namespace PlusAndComment.Controllers
         {
             return View(new AddPostVM());
         }
-        
+
         [HttpPost]
         [AjaxAuthorize]
         public JsonResult AddPlusToPostAsync(int id)
@@ -422,7 +375,7 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public JsonResult Upload()
         {
-            AddPostVM post = new AddPostVM();
+            dynamic post = new ExpandoObject();
             string pathUrl = string.Empty;
 
             for (int i = 0; i < Request.Files.Count; i++)
@@ -433,13 +386,21 @@ namespace PlusAndComment.Controllers
                 if (ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".gif")
                 {
                     var fileName = Path.GetFileName(file.FileName);
-                    pathUrl = Path.Combine("..\\Storage", fileName);
-                    var savefileName = Path.GetFileName(file.FileName);
-                    var savePath = Path.Combine(Server.MapPath("~/Storage"), savefileName);
-                    file.SaveAs(savePath);
-                    post.Type = PostType.img;
-                    post.FilePath = pathUrl;
+                    //pathUrl = Path.Combine("..\\Storage", fileName);
+                    //var savefileName = Path.GetFileName(file.FileName);
+
+                    var savePath = Path.Combine(Server.MapPath("~/Storage"), file.FileName);
+                    var savefileName = CheckIffILExist(savePath);
+                    file.SaveAs(savefileName);
+                    post.FilePath = savefileName;
                     post.ReferenceUrl = string.Empty;
+                    if(ext == ".jpg"|| ext == ".png" || ext == ".jpeg")
+                    {
+                        post.postType = "img";
+                        var fielName = Path.GetFileName(savefileName);
+                        post.ImageRelativePath = "Storage/" + fileName;
+                        post.AddedFileName = file.FileName;
+                    }
                     if (ext == ".gif")
                     {
                         Image gifImg = Image.FromStream(file.InputStream);
@@ -447,21 +408,21 @@ namespace PlusAndComment.Controllers
                         int frameCount = gifImg.GetFrameCount(dimension);
                         var hhh = gifImg.SelectActiveFrame(dimension, 0);
 
+                        //string pngFile = Path.ChangeExtension(savePath, "png");
                         string pngFile = Path.ChangeExtension(savePath, "png");
-                        string pngUrl = Path.ChangeExtension(pathUrl, "png");
+                        string pngUrl = Path.Combine("/Storage", Path.ChangeExtension(Path.GetFileName(savefileName), "png"));
+                        //string gifUrl = Path.Combine("/Storage", Path.ChangeExtension(Path.GetFileName(savefileName), "gif"));
                         post.EmbedUrl = pngUrl;
-                        post.Type = PostType.gif;
+                        post.postType = "gif";
                         post.ReferenceUrl = pngUrl;
 
-                        var newName = CheckIffILExist(pngFile);
+                        var newName = Path.ChangeExtension(savefileName, "png");
 
                         gifImg.Save(newName, ImageFormat.Png);
                     }
                 }
 
-                post.FilePath = pathUrl;
-
-                var id = SavePost(post);
+                post.Path = pathUrl;
 
                 return Json(post, JsonRequestBehavior.AllowGet);
             }
@@ -687,11 +648,15 @@ namespace PlusAndComment.Controllers
             Stream stream = httpWebReponse.GetResponseStream();
 
             var name = url.Substring(url.LastIndexOf("/") + 1).Split('.')[0];
-            var relativePath = "../Storage/";
+            var folder = "Storage/";
             var absoluteImgPath = Server.MapPath("~/Storage/" + name);
 
-            var absolutePathGif = CheckIffILExist(absoluteImgPath + ".gif");
-            var absolutePathPng = CheckIffILExist(absoluteImgPath + ".png");
+            var newFileWithID = CheckIffILExist(absoluteImgPath + ".gif");
+            var fielName = Path.GetFileNameWithoutExtension(newFileWithID);
+            var directory = Path.GetDirectoryName(newFileWithID);
+
+            var absolutePathGif = directory + "\\" + fielName + ".gif";
+            var absolutePathPng = directory + "\\" + fielName + ".png";
             var newFileNameWithoutExt = Path.GetFileNameWithoutExtension(absolutePathPng);
 
             using (FileStream fs = System.IO.File.Create(absolutePathGif))
@@ -713,8 +678,8 @@ namespace PlusAndComment.Controllers
             AddPostVM thumbphoto = new AddPostVM();
             thumbphoto.Type = PostType.gif;
 
-            thumbphoto.EmbedUrl = relativePath + newFileNameWithoutExt + ".gif";
-            thumbphoto.ReferenceUrl = relativePath + newFileNameWithoutExt + ".png"; 
+            thumbphoto.EmbedUrl = folder + newFileNameWithoutExt + ".gif";
+            thumbphoto.ReferenceUrl = folder + newFileNameWithoutExt + ".png"; 
             thumbphoto.Url = url;
             thumbphoto.ImageUrl = url;
 
