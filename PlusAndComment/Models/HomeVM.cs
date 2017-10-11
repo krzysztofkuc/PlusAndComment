@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PlusAndComment.Models.AddPostVMs;
+using System.Collections.Generic;
 
 namespace PlusAndComment.Models
 {

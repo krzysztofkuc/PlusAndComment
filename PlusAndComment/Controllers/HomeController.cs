@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using PlusAndComment.Common;
 using PlusAndComment.Common.CustomAttributes;
 using PlusAndComment.Models;
+using PlusAndComment.Models.AddPostVMs;
 using PlusAndComment.Models.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Controllers
@@ -78,8 +78,8 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult CreateArticle()
         {
-            var article  = TempData["article"] as ArticleVM;
-            var articleEnt = AutoMapper.Mapper.Map<ArticleVM, ArticleEntity>(article);
+            var article  = TempData["article"] as AddArticleVM;
+            var articleEnt = AutoMapper.Mapper.Map<AddArticleVM, ArticleEntity>(article);
             articleEnt.AddedTime = DateTime.Now;
             dbContext.Articles.Add(articleEnt);
             dbContext.Entry(articleEnt).State = EntityState.Added;
@@ -120,47 +120,93 @@ namespace PlusAndComment.Controllers
 
         [HttpPost]
         [Authorize]
+        public ActionResult AddPost(AddLinkVM post)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddPost(AddPictureFromDiskVM post)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddPost(AddHumourVM post)
+        {
+            //post.FilePath = SaveTextAsImage(post.Content);
+            //post.Type = UIPostType.img;
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddPost(AddSucharVM post)
+        {
+            var sucharEnt = AutoMapper.Mapper.Map<AddSucharVM, SucharEntity>(post);
+            sucharEnt.AddedTime = DateTime.Now;
+
+            //id that not done earlier ?
+            sucharEnt.RelThumbPath = SaveTextAsImage(post.Content);
+
+            dbContext.Suchary.Add(sucharEnt);
+
+            dbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult AddPost(AddArticleVM post)
+        {
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize]
         public ActionResult AddPost(AddPostVM post)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(post);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(post);
+            //}
 
-            if(post.Tab == "5zakladka")
-            {
-                TempData["article"] = post.Article;
-                return RedirectToAction("CreateArticle");
-            }
+            //switch (post.Type)
+            //{
+            //    case UIPostType.link:
+            //        var newEnt = SavePostLink(post);
+            //        break;
+            //    case UIPostType.picture:
+            //        break;
+            //    case UIPostType.humour:
+            //        break;
+            //    case UIPostType.suchar:
+            //        break;
+            //    case UIPostType.article:
+            //        break;
+            //}
 
-            if (post.suchar.Content != null)
-            {
-                var sucharEnt = AutoMapper.Mapper.Map<SucharVM, SucharEntity>(post.suchar);
-                sucharEnt.AddedTime = DateTime.Now;
-                sucharEnt.RelThumbPath = SaveTextAsImage(post.suchar.Content);
-                post.Type = PostType.img;
+            //================================================================================================
 
-                dbContext.Suchary.Add(sucharEnt);
 
-                dbContext.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            //if(post.Tab == "5zakladka")
+            //{
+            //    TempData["article"] = post.Article;
+            //    return RedirectToAction("CreateArticle");
+            //}
 
-            if (post.Url != null)
-            {
-                System.Uri uri = new Uri(post.Url);
+            //if (p .Url != null)
+            //{
+            //    System.Uri uri = new Uri(post.Url);
 
-                if (!post.Url.Contains("youtube") && !string.IsNullOrWhiteSpace(uri.Query))
-                {
-                    post.Url = uri.AbsoluteUri.Replace(uri.Query, string.Empty);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(post.Content))
-            {
-                post.FilePath = SaveTextAsImage(post.Content);
-                post.Type = PostType.img;
-            }
+            //    if (!post.Url.Contains("youtube") && !string.IsNullOrWhiteSpace(uri.Query))
+            //    {
+            //        post.Url = uri.AbsoluteUri.Replace(uri.Query, string.Empty);
+            //    }
+            //}
 
             var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
             postEntity.ApplicationUser_Id = User.Identity.GetUserId();
@@ -168,6 +214,35 @@ namespace PlusAndComment.Controllers
             dbContext.Posts.Add(postEntity);
             dbContext.SaveChanges();
             return RedirectToAction("Index", dbContext.Posts.ToList());
+        }
+
+        private PostEntity SavePostLink(AddLinkVM post)
+        {
+            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
+            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+
+            dbContext.Posts.Add(postEntity);
+            dbContext.SaveChanges();
+
+            return postEntity;
+        }
+
+        private PostEntity SavePost(PostVM post)
+        {
+            try
+            {
+                var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
+                postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+
+                dbContext.Posts.Add(postEntity);
+                dbContext.SaveChanges();
+
+                return postEntity;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         private string SaveTextAsImage(string content)
@@ -248,7 +323,7 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public ActionResult AddPost()
         {
-            return View(new AddPostVM());
+            return View(Url.Content("~/Views/Home/AddPost/AddPost.cshtml"));
         }
 
         [HttpPost]
@@ -375,7 +450,6 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public JsonResult Upload()
         {
-            dynamic post = new ExpandoObject();
             string pathUrl = string.Empty;
 
             for (int i = 0; i < Request.Files.Count; i++)
@@ -392,14 +466,16 @@ namespace PlusAndComment.Controllers
                     var savePath = Path.Combine(Server.MapPath("~/Storage"), file.FileName);
                     var savefileName = CheckIffILExist(savePath);
                     file.SaveAs(savefileName);
-                    post.FilePath = savefileName;
-                    post.ReferenceUrl = string.Empty;
+                    //post.FilePath = savefileName;
+                    //post.ReferenceUrl = string.Empty;
                     if(ext == ".jpg"|| ext == ".png" || ext == ".jpeg")
                     {
-                        post.postType = "img";
-                        var fielName = Path.GetFileName(savefileName);
-                        post.ImageRelativePath = "Storage/" + fileName;
-                        post.AddedFileName = file.FileName;
+                        Picture pic = new Picture();
+                        pic.FileName = Path.GetFileName(savefileName);
+                        pic.PathRelative = Url.Content("~/Storage/" + pic.FileName);
+
+                        return Json(pic, JsonRequestBehavior.AllowGet);
+                        //post.AddedFileName = file.FileName;
                     }
                     if (ext == ".gif")
                     {
@@ -411,20 +487,22 @@ namespace PlusAndComment.Controllers
                         //string pngFile = Path.ChangeExtension(savePath, "png");
                         string pngFile = Path.ChangeExtension(savePath, "png");
                         string pngUrl = Path.Combine("/Storage", Path.ChangeExtension(Path.GetFileName(savefileName), "png"));
-                        //string gifUrl = Path.Combine("/Storage", Path.ChangeExtension(Path.GetFileName(savefileName), "gif"));
-                        post.EmbedUrl = pngUrl;
-                        post.postType = "gif";
-                        post.ReferenceUrl = pngUrl;
+
+                        Gif post = new Gif();
+
+                        post.FirstFramePathRelative = Url.Content("~/Storage/") + Path.ChangeExtension(Path.GetFileName(savefileName), "png");
+                        post.PathRelative = Url.Content("~/Storage/") + Path.GetFileName(savefileName);
+
+                        //post.EmbedUrl = pngUrl;
+                        //post.Url = pngUrl;
 
                         var newName = Path.ChangeExtension(savefileName, "png");
 
                         gifImg.Save(newName, ImageFormat.Png);
+
+                        return Json(post, JsonRequestBehavior.AllowGet);
                     }
                 }
-
-                post.Path = pathUrl;
-
-                return Json(post, JsonRequestBehavior.AllowGet);
             }
 
             return null;
@@ -514,11 +592,11 @@ namespace PlusAndComment.Controllers
             if (selectedValue.Contains("vimeo.com"))
             {
                 AddPostVM thumbVideo = new AddPostVM();
-                thumbVideo.Type = PostType.mov;
+                thumbVideo.Link.Type = PostType.mov;
 
-                thumbVideo.EmbedUrl = ConvertToEmbedVideoUrl(selectedValue);
-                thumbVideo.Url = thumbVideo.Url;
-                thumbVideo.Header = thumbVideo.Url;
+                thumbVideo.Link.EmbedUrl = ConvertToEmbedVideoUrl(selectedValue);
+                thumbVideo.Link.Url = thumbVideo.Link.Url;
+                thumbVideo.Link.Header = thumbVideo.Link.Url;
 
                 return Json(thumbVideo, JsonRequestBehavior.AllowGet);
             }
@@ -526,30 +604,30 @@ namespace PlusAndComment.Controllers
             if (selectedValue.Contains("dailymotion.com"))
             {
                 AddPostVM thumbVideo = new AddPostVM();
-                thumbVideo.Type = PostType.mov;
+                thumbVideo.Link.Type = PostType.mov;
 
-                thumbVideo.EmbedUrl = ConvertToEmbedDailyMotionUrl(selectedValue);
-                thumbVideo.Url = selectedValue;
-                thumbVideo.Header = thumbVideo.Url;
+                thumbVideo.Link.EmbedUrl = ConvertToEmbedDailyMotionUrl(selectedValue);
+                thumbVideo.Link.Url = selectedValue;
+                thumbVideo.Link.Header = thumbVideo.Link.Url;
 
                 return Json(thumbVideo, JsonRequestBehavior.AllowGet);
             }
 
             if (selectedValue.Contains("youtube"))
             {
-                AddPostVM thumbVideo = new AddPostVM();
+                AddLinkVM thumbVideo = new AddLinkVM();
                 thumbVideo.Type = PostType.mov;
 
                 thumbVideo.EmbedUrl = ConvertToEmbedYouTubeUrl(selectedValue);
                 thumbVideo.Url = selectedValue;
-                thumbVideo.Header = thumbVideo.Url;
+
 
                 return Json(thumbVideo, JsonRequestBehavior.AllowGet);
             }
 
             if (selectedValue.Contains("facebook.com") && !selectedValue.ToLower().EndsWith("&theater"))
             {
-                AddPostVM thumbVideo = new AddPostVM();
+                AddLinkVM thumbVideo = new AddLinkVM();
                 thumbVideo.Type = PostType.mov;
 
                 thumbVideo.EmbedUrl = ConvertToEmbedFacebookUrl(selectedValue);
@@ -561,19 +639,21 @@ namespace PlusAndComment.Controllers
 
             if (selectedValue.ToLower().EndsWith(".jpg") || selectedValue.ToLower().EndsWith(".jpeg") || selectedValue.ToLower().EndsWith(".png"))
             {
-                AddPostVM thumbphoto = new AddPostVM();
+                AddLinkVM thumbphoto = new AddLinkVM();
+                thumbphoto.Picture = new Picture();
                 thumbphoto.Type = PostType.img;
 
                 thumbphoto.Url = selectedValue;
-                thumbphoto.ImageUrl = selectedValue;
+                thumbphoto.Picture.Url= selectedValue;
                 thumbphoto.Header = thumbphoto.Url;
 
                 return Json(thumbphoto, JsonRequestBehavior.AllowGet);
             }
             else if (selectedValue.EndsWith(".gif"))
             {
-                AddPostVM thumbphoto =  ManageGif(selectedValue);
-                thumbphoto.Header = thumbphoto.Url;
+                Gif thumbphoto =  ManageGif(selectedValue);
+                thumbphoto.EmbedUrl = selectedValue;
+                //thumbphoto.Link.Header = thumbphoto.Link.Url;
 
                 return Json(thumbphoto, JsonRequestBehavior.AllowGet);
             }
@@ -629,11 +709,11 @@ namespace PlusAndComment.Controllers
 
             if (longestWidth.Width > longestHeight.Height)
             {
-                thumb.ImageUrl = longestHeight.Tag.ToString();
+                thumb.Link.Picture.Url= longestHeight.Tag.ToString();
             }
             else
             {
-                thumb.ImageUrl = longestWidth.Tag.ToString();
+                thumb.Link.Picture.Url = longestWidth.Tag.ToString();
             }
 
             thumb.Header = headerX;
@@ -641,7 +721,7 @@ namespace PlusAndComment.Controllers
             return Json(thumb, JsonRequestBehavior.AllowGet);
         }
 
-        private AddPostVM ManageGif(string url)
+        private Gif ManageGif(string url)
         {
             HttpWebRequest httpWebRequest = (HttpWebRequest)HttpWebRequest.Create(url);
             HttpWebResponse httpWebReponse = (HttpWebResponse)httpWebRequest.GetResponse();
@@ -664,7 +744,6 @@ namespace PlusAndComment.Controllers
                 stream.CopyTo(fs);
                 stream.Dispose();
             }
-            
 
             Image img = null;
             using (var wc = new WebClient())
@@ -675,15 +754,14 @@ namespace PlusAndComment.Controllers
             var pngPath = Path.ChangeExtension(newFileNameWithoutExt, "png");
             img.Save(absolutePathPng);
 
-            AddPostVM thumbphoto = new AddPostVM();
-            thumbphoto.Type = PostType.gif;
+            Gif gif = new Gif();
+            gif.FirstFramePathAbsolute = absolutePathPng;
+            gif.FirstFramePathRelative = folder + newFileNameWithoutExt + ".png";
+            gif.PathRelative= folder + newFileNameWithoutExt + ".gif";
+            gif.FileName = newFileNameWithoutExt + ".gif";
+            gif.Url = url;
 
-            thumbphoto.EmbedUrl = folder + newFileNameWithoutExt + ".gif";
-            thumbphoto.ReferenceUrl = folder + newFileNameWithoutExt + ".png"; 
-            thumbphoto.Url = url;
-            thumbphoto.ImageUrl = url;
-
-            return thumbphoto;
+            return gif;
         }
 
         private string ConvertToEmbedVideoUrl(string url)
@@ -736,10 +814,10 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         public ActionResult Suchar(int id)
         {
-            SucharVM homeVm = new SucharVM();
+            AddSucharVM homeVm = new AddSucharVM();
             var post = dbContext.Suchary.Find(id);
 
-            var postMapped = AutoMapper.Mapper.Map<SucharVM>(post);
+            var postMapped = AutoMapper.Mapper.Map<AddSucharVM>(post);
 
             return View(postMapped);
         }

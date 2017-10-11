@@ -223,8 +223,10 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Common\CustomAttributes\AjaxAuthorizeAttribute.cs" />
     <Compile Include="Common\Enums.cs" />
+    <Compile Include="Common\Gif.cs" />
     <Compile Include="Common\HtmlHelperExt.cs" />
     <Compile Include="Common\HttpTools.cs" />
+    <Compile Include="Common\Picture.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -238,8 +240,12 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\AddPostVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddHumourVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddLinkVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddPictureFromDiskVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddPostVM.cs" />
     <Compile Include="Models\ArticlesVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddArticleVM.cs" />
     <Compile Include="Models\ArticleVM.cs" />
     <Compile Include="Models\ConfrimEmailVM.cs" />
     <Compile Include="Models\Entities\ArticleEntity.cs" />
@@ -253,9 +259,10 @@
     <Compile Include="Models\MainPostVM.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MenageRolesVM.cs" />
-    <Compile Include="Models\PostDetailsVM.cs" />
+    <Compile Include="Models\PostVM.cs" />
     <Compile Include="Models\FrameVM.cs" />
     <Compile Include="Models\RolaVM.cs" />
+    <Compile Include="Models\SucharVM.cs" />
     <Compile Include="Models\UserProfileSettingsVM.cs" />
     <Compile Include="Models\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -381,7 +388,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Compile Include="Models\SucharVM.cs" />
+    <Compile Include="Models\AddPostVMs\AddSucharVM.cs" />
     <None Include="Properties\PublishProfiles\trudnezarty.hostingasp.pl - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy.pubxml" />
@@ -523,7 +530,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\AddPost.cshtml" />
+    <Content Include="Views\Home\AddPost\AddPost.cshtml" />
     <Content Include="Views\Shared\_PostPartial.cshtml" />
     <Content Include="Views\Shared\_UserRolePartial.cshtml" />
     <Content Include="Views\Manage\ManageRoles.cshtml" />
@@ -539,7 +546,13 @@
     <Content Include="Views\Home\Frame.cshtml" />
     <Content Include="Views\Home\Articles.cshtml" />
     <Content Include="Views\Shared\_ArticleRowPartial.cshtml" />
-    <Content Include="Views\Home\AddPost\Partials\_PostPreviewPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_PostLinkPreviewPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_AddLinkPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_AddPictureFromDiskPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_PictureFromDiskPreviewPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_AddHumourPartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_AddArticlePartial.cshtml" />
+    <Content Include="Views\Home\AddPost\Partials\_AddSucharPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

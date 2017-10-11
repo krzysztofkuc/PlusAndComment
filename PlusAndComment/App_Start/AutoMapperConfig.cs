@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using PlusAndComment.Models;
+using PlusAndComment.Models.AddPostVMs;
 using PlusAndComment.Models.Entities;
-using System.Collections.Generic;
 using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.App_Start
@@ -31,7 +31,7 @@ namespace PlusAndComment.App_Start
 
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<PostDetailsVM, PostEntity>();
+                cfg.CreateMap<PostVM, PostEntity>();
 
                 cfg.CreateMap<MainPostVM, PostEntity>()
                 .ForMember(m => m.Posts, opt => opt.MapFrom(c => c.Posts));
@@ -49,15 +49,49 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<UserProfileSettings, UserProfileSettingsVM>();
                 cfg.CreateMap<UserProfileSettingsVM,UserProfileSettings>();
 
-                cfg.CreateMap<ArticleVM, ArticleEntity>()
+                cfg.CreateMap<AddArticleVM, ArticleEntity>()
                 .ForMember(m => m.Url, opt => opt.MapFrom(c => c.Url));
 
-                cfg.CreateMap<ArticleEntity, ArticleVM>()
-                .ForMember(m => m.Url, opt => opt.MapFrom(c => c.Url));
+                cfg.CreateMap<ArticleEntity, AddArticleVM>();
 
-                cfg.CreateMap<SucharEntity, SucharVM>();
+                cfg.CreateMap<SucharEntity, AddSucharVM>();
+                cfg.CreateMap<AddSucharVM, SucharEntity>();
+
+                cfg.CreateMap<AddPictureFromDiskVM, PostEntity>();
+                cfg.CreateMap<AddHumourVM, PostEntity>();
+
+                cfg.CreateMap<ArticleVM, ArticleEntity>();
+                cfg.CreateMap<ArticleEntity, ArticleVM>();
+
                 cfg.CreateMap<SucharVM, SucharEntity>();
+                cfg.CreateMap<SucharEntity, SucharVM>();
 
+                //cfg.CreateMap<AddLinkVM, PostEntity>()
+                //.ForMember(target => target.EmbedUrl, src =>
+                //{
+                //    src.Condition(s => s.Type == PostType.gif);
+                //    src.MapFrom(s => s.Gif.FirstFramePathRelative);
+                //})
+                //.ForMember(target => target.ReferenceUrl, src =>
+                //{
+                //    src.Condition(s => s.Type == PostType.gif);
+                //    src.MapFrom(s => s.Gif.PathRelative);
+                //});
+
+                //cfg.CreateMap<AddLinkVM, PostEntity>()
+                //.ForMember(target => target.EmbedUrl, src =>
+                //{
+                //    src.Condition(s => s.Type == PostType.img);
+                //    src.MapFrom(s => s.Picture.PathRelative);
+                //})
+                //.ForMember(target => target.ReferenceUrl, src =>
+                //{
+                //    src.Condition(s => s.Type == PostType.img);
+                //    src.MapFrom(s => s.Picture.PathRelative);
+                //});
+
+
+                //.ForMember(target => target.ReferenceUrl, src => src.Condition(s => s.PostType == UIPostType.).MapFrom(c => c.Url));
 
                 //cfg.CreateMap<ICollection<PostEntity>, ICollection<MainPostVM>>();
                 //cfg.CreateMap< ICollection <MainPostVM>, ICollection <PostEntity>>();

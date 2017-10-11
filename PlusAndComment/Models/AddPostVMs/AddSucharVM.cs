@@ -1,17 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PlusAndComment.Models.Entities
+namespace PlusAndComment.Models.AddPostVMs
 {
-    [Table("Suchary")]
-    public class SucharEntity
+    [Serializable]
+    public class AddSucharVM : PostVM
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
         public string Content { get; set; }
+
         public string AbsThumbPath { get; set; }
+
         public string RelThumbPath { get; set; }
-        public DateTime AddedTime { get; set; }
     }
 }

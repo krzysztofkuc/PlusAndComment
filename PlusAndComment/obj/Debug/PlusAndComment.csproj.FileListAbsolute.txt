@@ -87,7 +87,8 @@ D:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.OAuth.
 D:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.Google.xml
 D:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.Twitter.xml
 D:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.Migrations.InitialCreate.resources
+D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.Migrations.AAA.resources
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csproj.GenerateResource.Cache
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.dll
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.pdb
+D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csprojResolveAssemblyReference.cache

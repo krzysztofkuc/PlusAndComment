@@ -46,6 +46,7 @@ textarea {
 
 textarea{
     background-color: #5a707c;
+    border-radius: 4px;
 }
 
 /*Comment partial */
@@ -689,3 +690,7 @@ textarea{
             color: white;
         }
         /*==============================================================================*/
+
+        .maxW100{
+            max-width: 100%;
+        }

@@ -66,10 +66,10 @@ namespace PlusAndComment.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.ArticleVM> ArticleVMs { get; set; }
+        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddArticleVM> ArticleVMs { get; set; }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.SucharVM> SucharVMs { get; set; }
+        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddSucharVM> SucharVMs { get; set; }
 
-        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVM> AddPostVMs { get; set; }
+        public System.Data.Entity.DbSet<PlusAndComment.Models.AddPostVMs.AddPostVM> AddPostVMs { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Runtime.Serialization;
+﻿using System;
 
 namespace PlusAndComment.Common
 {
@@ -9,6 +6,10 @@ namespace PlusAndComment.Common
     public static class Enums
     {
         //leave it in the same order
-        public enum PostType {img, gif, mov, suchar, article};
+        public enum PostType {img, gif, mov};
+
+        public enum UIPostType { humour, picture, link, suchar, article };
+
+        public enum PictureType { img, gif };
     }
 }
