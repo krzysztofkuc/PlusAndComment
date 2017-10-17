@@ -24,6 +24,6 @@ namespace PlusAndComment.Common
 
         public string EmbedUrl { get; set; }
 
-        public PostType Type { get { return PostType.gif; } }
+        public string Type { get { return PostType.gif.ToFriendlyString(); } }
     }
 }

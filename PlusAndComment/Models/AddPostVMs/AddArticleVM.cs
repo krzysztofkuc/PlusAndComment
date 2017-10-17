@@ -3,8 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PlusAndComment.Models.AddPostVMs
 {
-    public class AddArticleVM : PostVM
+    public class AddArticleVM
     {
+        [Key]
+        public int ID { get; set; }
+
         [Url]
         [Required]
         public string Url { get; set; }
@@ -26,5 +29,7 @@ namespace PlusAndComment.Models.AddPostVMs
 
         [Required]
         public string RelThumbPath { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

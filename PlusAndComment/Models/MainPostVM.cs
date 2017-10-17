@@ -17,6 +17,7 @@ namespace PlusAndComment.Models
         public int MinusAmount { get; set; }
         public string ShortDescription { get; set; }
 
+        public string FileName { get; set; }
         [DisplayFormat(NullDisplayText="")]
         [Required(ErrorMessage = "Pole opis nie może być puste.")]
         public string LongDescription { get; set; }
@@ -24,7 +25,7 @@ namespace PlusAndComment.Models
         public string Url { get; set; }
         public string EmbedUrl { get; set; }
         public bool Removed { get; set; }
-        public PostType postType { get; set; }
+        public string PostType { get; set; }
         [Display(Name ="18+")]
         public bool NeedAge { get; set; }
         public bool Banned { get; set; }

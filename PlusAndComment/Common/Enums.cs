@@ -1,4 +1,5 @@
 ﻿using System;
+using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Common
 {
@@ -11,5 +12,23 @@ namespace PlusAndComment.Common
         public enum UIPostType { humour, picture, link, suchar, article };
 
         public enum PictureType { img, gif };
+    }
+
+    public static class PosTypeExtensions
+    {
+        public static string ToFriendlyString(this PostType me)
+        {
+            switch (me)
+            {
+                case PostType.img:
+                    return "img";
+                case PostType.gif:
+                    return "gif";
+                case PostType.mov:
+                    return "mov";
+                default:
+                    return "damn";
+            }
+        }
     }
 }

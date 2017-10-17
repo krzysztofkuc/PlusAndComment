@@ -14,8 +14,6 @@ namespace PlusAndComment.Models
         [DisplayName("18+")]
         public bool NeedAge { get; set; }
 
-        public PostType Type { get; set; }
-
         public DateTime? AddedTime { get { return DateTime.Now; } }
 
         public virtual ApplicationUser ApplicationUser { get; set; }

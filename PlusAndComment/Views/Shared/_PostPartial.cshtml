@@ -40,7 +40,7 @@
                                 <iframe class="embed-responsive-item" id="movieThumb" width="470" height="365" src="@Model.EmbedUrl" frameborder="0" allowfullscreen style="max-width: 100%;"></iframe>
                             </div>
                         }
-                        else if (Model.postType == Enums.PostType.gif)
+                        else if (Model.PostType == Enums.PostType.gif.ToFriendlyString())
                         {
                             <div>
                                 @if (Request.Browser.IsMobileDevice)
@@ -49,7 +49,7 @@
                                 }
                                 else
                                 {
-                                    <img src="@Model.ReferenceUrl" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true" style="max-width: 450px;"/>
+                                    <img src="@Url.Content("~/Storage/" + @Model.FileName)" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true" style="max-width: 450px;"/>
                                 }
                             </div>
                         }
@@ -60,12 +60,19 @@
                         {
                             <img src="@Model.Url" class="img-responsive" style="margin-left: auto; margin-right: auto;" />
                         }
-                        else if (!string.IsNullOrWhiteSpace(Model.FilePath) && (Model.FilePath.ToLower().EndsWith(".jpg") 
-                                                                            || Model.FilePath.ToLower().EndsWith(".jpeg") 
-                                                                            || Model.FilePath.ToLower().EndsWith(".png") 
-                                                                            || Model.FilePath.ToLower().EndsWith(".bmp")))
+                        else if (Model.PostType == Enums.PostType.img.ToFriendlyString())
                         {
-                            <img src="@Model.FilePath" data-wait="true" class="img-responsive" style="max-height: 500px; margin-left: auto; margin-right: auto;" />
+                            if (!string.IsNullOrWhiteSpace(Model.FilePath) && (Model.FilePath.ToLower().EndsWith(".jpg")
+                                                                           || Model.FilePath.ToLower().EndsWith(".jpeg")
+                                                                           || Model.FilePath.ToLower().EndsWith(".png")
+                                                                           || Model.FilePath.ToLower().EndsWith(".bmp")))
+                            {
+                                <img src="@Model.FilePath" data-wait="true" class="img-responsive" style="max-height: 500px; margin-left: auto; margin-right: auto;" />
+                            }
+                            else
+                            {
+                            <img src="@Url.Content("~/Storage/" + @Model.FileName)" data-wait="true" class="img-responsive" style="max-height: 500px; margin-left: auto; margin-right: auto;" />
+                            }
                         }
 
                         <div style="text-align: left; color:#B0B0B0; font-size: 11px; word-wrap: break-word;">

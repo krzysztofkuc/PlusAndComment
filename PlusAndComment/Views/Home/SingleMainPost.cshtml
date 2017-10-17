@@ -14,7 +14,7 @@
                     <iframe class="embed-responsive-item" id="movieThumb" src="@Model.EmbedUrl" frameborder="0" allowfullscreen style="width: 600px; height: 500px; max-width: 100%;"></iframe>
                 </div>
             }
-            else if (Model.postType == Enums.PostType.gif)
+            else if (Model.PostType == Enums.PostType.gif.ToFriendlyString())
             {
                 <div>
                     @if (Request.Browser.IsMobileDevice)

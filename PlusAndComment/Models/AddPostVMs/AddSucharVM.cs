@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace PlusAndComment.Models.AddPostVMs
 {
     [Serializable]
-    public class AddSucharVM : PostVM
+    public class AddSucharVM
     {
         [Key]
         public int Id { get; set; }

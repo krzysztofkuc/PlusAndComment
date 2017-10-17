@@ -20,6 +20,6 @@ namespace PlusAndComment.Common
 
         public string EmbedUrl { get; set; }
 
-        public PostType Type { get { return PostType.img; } }
+        public string Type { get { return PostType.img.ToFriendlyString(); } }
     }
 }

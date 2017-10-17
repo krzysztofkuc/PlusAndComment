@@ -2,6 +2,7 @@
 using PlusAndComment.Models;
 using PlusAndComment.Models.AddPostVMs;
 using PlusAndComment.Models.Entities;
+using System.IO;
 using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.App_Start
@@ -34,14 +35,17 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<PostVM, PostEntity>();
 
                 cfg.CreateMap<MainPostVM, PostEntity>()
+                .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.PostType))
                 .ForMember(m => m.Posts, opt => opt.MapFrom(c => c.Posts));
 
                 cfg.CreateMap<PostEntity, MainPostVM>()
+                .ForMember(m => m.FileName, opt => opt.MapFrom(c => Path.GetFileName(c.ReferenceUrl)))
+                .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.PostType))
                 .ForMember(m => m.Posts, opt => opt.MapFrom(c => c.Posts))
                 .ForMember(x => x.AmountOfAllcommens, opt => opt.Ignore());
 
                 cfg.CreateMap<AddPostVM, PostEntity>()
-                .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.Type));
+                .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.Type.ToString()));
 
                 cfg.CreateMap<PostEntity,AddPostVM>()
                 .ForMember(m => m.Type, opt => opt.MapFrom(c => c.PostType));
@@ -57,7 +61,10 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<SucharEntity, AddSucharVM>();
                 cfg.CreateMap<AddSucharVM, SucharEntity>();
 
-                cfg.CreateMap<AddPictureFromDiskVM, PostEntity>();
+                cfg.CreateMap<AddPictureFromDiskVM, PostEntity>()
+                .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.Type))
+                .ForMember(mf => mf.ReferenceUrl, o => o.MapFrom(c => c.Type == "gif" ? c.Gif.FirstFramePathRelative : c.Picture.PathRelative));
+
                 cfg.CreateMap<AddHumourVM, PostEntity>();
 
                 cfg.CreateMap<ArticleVM, ArticleEntity>();
@@ -67,28 +74,14 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<SucharEntity, SucharVM>();
 
                 //cfg.CreateMap<AddLinkVM, PostEntity>()
-                //.ForMember(target => target.EmbedUrl, src =>
-                //{
-                //    src.Condition(s => s.Type == PostType.gif);
-                //    src.MapFrom(s => s.Gif.FirstFramePathRelative);
-                //})
-                //.ForMember(target => target.ReferenceUrl, src =>
-                //{
-                //    src.Condition(s => s.Type == PostType.gif);
-                //    src.MapFrom(s => s.Gif.PathRelative);
-                //});
+                
+                //.ForMember(m => m.FilePath, opt => opt.MapFrom(c => c.Picture.PathRelative));
 
-                //cfg.CreateMap<AddLinkVM, PostEntity>()
-                //.ForMember(target => target.EmbedUrl, src =>
-                //{
-                //    src.Condition(s => s.Type == PostType.img);
-                //    src.MapFrom(s => s.Picture.PathRelative);
-                //})
-                //.ForMember(target => target.ReferenceUrl, src =>
-                //{
-                //    src.Condition(s => s.Type == PostType.img);
-                //    src.MapFrom(s => s.Picture.PathRelative);
-                //});
+                cfg.CreateMap<PostEntity, AddLinkVM>();
+
+                cfg.CreateMap<AddLinkVM, PostEntity>()
+                .ForMember(x => x.PostType, optx => optx.MapFrom(opt => opt.Type));
+
 
 
                 //.ForMember(target => target.ReferenceUrl, src => src.Condition(s => s.PostType == UIPostType.).MapFrom(c => c.Url));
