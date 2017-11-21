@@ -45,11 +45,11 @@
                             <div>
                                 @if (Request.Browser.IsMobileDevice)
                                 {
-                                    <img src="@Model.EmbedUrl" data-wait="true" style="max-width: 450px;" />
+                                    <img src="@Model.EmbedUrl" data-wait="true" style="max-width: 100%" />
                                 }
                                 else
                                 {
-                                    <img src="@Url.Content("~/Storage/" + @Model.FileName)" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true" style="max-width: 450px;"/>
+                                    <img src="@Url.Content("~/Storage/" + @Model.FileName)" class="gifplayer gifplayer_@(ViewBag.amountPart)" data-wait="true" style="max-width: 100%"/>
                                 }
                             </div>
                         }

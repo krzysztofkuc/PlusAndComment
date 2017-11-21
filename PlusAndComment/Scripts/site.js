@@ -140,5 +140,13 @@ $(".sucharThmb").click(function (e) {
 
     var idX = e.target.id.split("_")[1];
 
-    window.location.href = "Home/Suchar/" + idX;
+    window.location.href = "Suchar/" + idX;
 });
+
+
+//$(".nav li").on("click", function () {
+//    //$(".nav li").removeClass("active");
+//    $(this).addClass("active");
+//});
+
+

@@ -38,10 +38,10 @@ namespace PlusAndComment.Controllers
             homeVm.CurrentPage = page;
             homeVm.PostsCapacity = dbContext.Posts.OrderByDescending(m => m.ID).Where(m => m.PostEntity_ID == null && !m.Removed).Count();
             homeVm.Posts = AutoMapper.Mapper.Map<ICollection<PostEntity>,ICollection<MainPostVM>>(posts);
-            var dbArticles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
-            homeVm.Articles = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(dbArticles);
-            var dbSuchary = dbContext.Suchary.OrderByDescending(m => m.Id).ToList();
-            homeVm.Suchary = AutoMapper.Mapper.Map<ICollection<SucharEntity>, ICollection<SucharVM>>(dbSuchary);
+            //var dbArticles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
+            //homeVm.Articles = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(dbArticles);
+            //var dbSuchary = dbContext.Suchary.OrderByDescending(m => m.Id).ToList();
+            //homeVm.Suchary = AutoMapper.Mapper.Map<ICollection<SucharEntity>, ICollection<SucharVM>>(dbSuchary);
 
             var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
@@ -62,6 +62,23 @@ namespace PlusAndComment.Controllers
             homeVm.Posts = JoinPostsWithUsers(homeVm.Posts);
 
             return View(homeVm);
+        }
+
+        [HttpGet]
+        public ActionResult MemGenerator()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Suchary()
+        {
+            var dbSuchary = dbContext.Suchary.OrderByDescending(m => m.Id).ToList();
+            var suchary = AutoMapper.Mapper.Map<ICollection<SucharEntity>, ICollection<SucharVM>>(dbSuchary);
+            
+            var sucharyVM = new SucharyVM();
+            sucharyVM.Suchary = suchary.ToList();
+            return View(sucharyVM);
         }
 
         [HttpGet]
@@ -186,20 +203,14 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public ActionResult AddPostArticle(AddArticleVM post)
         {
-            if (!ModelState.IsValid)
-            {
-                return PartialView(Url.Content("~/Views/Home/AddPost/Partials/_AddArticlePartial.cshtml"), post);
-            }
-
             var articleEnt = AutoMapper.Mapper.Map<AddArticleVM, ArticleEntity>(post);
-            articleEnt.AddedTime = DateTime.Now;
-            
+            articleEnt.AddedTime = DateTime.Now;  
 
             dbContext.Articles.Add(articleEnt);
 
             dbContext.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Articles");
         }
 
         [HttpPost]
@@ -455,7 +466,7 @@ namespace PlusAndComment.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        
         public JsonResult Upload()
         {
             string pathUrl = string.Empty;

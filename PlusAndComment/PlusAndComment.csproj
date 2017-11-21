@@ -263,6 +263,7 @@
     <Compile Include="Models\FrameVM.cs" />
     <Compile Include="Models\RolaVM.cs" />
     <Compile Include="Models\SucharVM.cs" />
+    <Compile Include="Models\SucharyVM.cs" />
     <Compile Include="Models\UserProfileSettingsVM.cs" />
     <Compile Include="Models\UserVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -283,12 +284,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\gifplayer.css" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.min.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
@@ -389,6 +394,11 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Compile Include="Models\AddPostVMs\AddSucharVM.cs" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Properties\PublishProfiles\trudnezarty.hostingasp.pl - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\trudneżarty.pl - Web Deploy.pubxml" />
@@ -489,6 +499,7 @@
     <Content Include="Storage\logoFB.png" />
     <Content Include="Storage\logoIcon.ico" />
     <Content Include="Storage\osiemnascie.png" />
+    <Content Include="Storage\person-icon-8.png" />
     <Content Include="Storage\textBckg.bmp" />
     <Content Include="Storage\___osiemnascie.png" />
     <Content Include="Storage\__osiemnascie.png" />
@@ -553,6 +564,9 @@
     <Content Include="Views\Home\AddPost\Partials\_AddHumourPartial.cshtml" />
     <Content Include="Views\Home\AddPost\Partials\_AddArticlePartial.cshtml" />
     <Content Include="Views\Home\AddPost\Partials\_AddSucharPartial.cshtml" />
+    <Content Include="Views\Home\Suchary.cshtml" />
+    <Content Include="Views\Home\MemGenerator.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

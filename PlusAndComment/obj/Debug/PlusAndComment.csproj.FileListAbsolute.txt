@@ -1,15 +1,15 @@
+D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\System.Reflection.Metadata.dll
+D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\VBCSCompiler.exe
 D:\Repositories\PlusAndComment\PlusAndComment\bin\ApplicationInsights.config
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\csc.exe
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
-D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
-D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CodeAnalysis.dll
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.CSharp.Core.targets
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\Microsoft.VisualBasic.Core.targets
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\System.Collections.Immutable.dll
-D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\System.Reflection.Metadata.dll
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\vbc.exe
-D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\VBCSCompiler.exe
 D:\Repositories\PlusAndComment\PlusAndComment\bin\roslyn\VBCSCompiler.exe.config
 D:\Repositories\PlusAndComment\PlusAndComment\bin\PlusAndComment.dll.config
 D:\Repositories\PlusAndComment\PlusAndComment\bin\PlusAndComment.dll
@@ -91,3 +91,4 @@ D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.Migration
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csproj.GenerateResource.Cache
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.dll
 D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.pdb
+D:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csprojResolveAssemblyReference.cache

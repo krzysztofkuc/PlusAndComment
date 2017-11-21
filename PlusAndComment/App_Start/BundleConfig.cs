@@ -8,6 +8,9 @@ namespace PlusAndComment
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+            "~/Scripts/angular.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                         "~/Scripts/site.js",
                         "~/Scripts/jquery.gifplayer.js"));
@@ -28,16 +31,16 @@ namespace PlusAndComment
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                         "~/Scripts/moment.js",
                         "~/Scripts/moment-with-locales.js",
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootstrap-datetimepicker.min.js",
-                      "~/Scripts/respond.js"));
+                        "~/Scripts/bootstrap.js",
+                        "~/Scripts/bootstrap.min.js",
+                        "~/Scripts/bootstrap-datetimepicker.min.js",
+                        "~/Scripts/respond.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/Site.css",
-                      "~/Content/gifplayer.css"));
-
-
+                      "~/Content/gifplayer.css",
+                      "~/Content/font-awesome.min.css"));
         }
     }
 }

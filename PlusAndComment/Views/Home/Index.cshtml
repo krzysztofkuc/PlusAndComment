@@ -8,20 +8,9 @@
     <meta property="og:image" content="@Url.Content("~/Storage/logo.png")" />
 </head>
 
-<div class="container" style="max-width: 100%; margin-top: 20px;">
+<div class="container" style="max-width: 750px; margin-top: 20px;">
     <div class="row">
-        <div class="col-md-3" style="background-color: #465861; border-radius: 4px;">
-            <div>
-                <h3>Tak było...</h3>
-                <hr class="horizontalLine" />
-                @foreach (var article in Model.Articles)
-                {
-                    @Html.Partial("_ArticlesPartial", article)
-                }
-            </div>
-        </div>
-
-        <div class="col-md-6">
+        <div class="col-md-12">
             @foreach (var item in Model.Posts)
             {
                 //render if post is main post
@@ -39,15 +28,8 @@
                 <img src="~/Storage/ajax-loader.gif" />
             </div>
         </div>
-        <div class="col-md-3" style="background-color: #465861; border-radius: 4px;">
-            <h3>Suchar codzienny</h3>
-            <hr class="horizontalLine" />
-            @foreach (var suchar in Model.Suchary)
-            {
-                @Html.Partial("_SucharPartial", suchar)
-            }
-        </div>
     </div>
+
     <div class="row">
         @*pagination*@
         @{
@@ -97,10 +79,3 @@
         }
     </div>
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/bundles/site")
-
-
-}

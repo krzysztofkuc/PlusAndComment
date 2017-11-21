@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
 
 namespace PlusAndComment.Models.Entities
 {
@@ -19,5 +16,11 @@ namespace PlusAndComment.Models.Entities
         public string AbsThumbPath { get; set; }
         public string RelThumbPath { get; set; }
         public DateTime? AddedTime { get; set; }
+
+        //Dodać te pola na bazie
+        public string ThumbType { get; set; }
+        //public string FirstFrameGifRelativePath { get; set; }
+        //public string EmbelVideoUrl { get; set; }
+        //public string BigPictureUrl { get; set; }
     }
 }

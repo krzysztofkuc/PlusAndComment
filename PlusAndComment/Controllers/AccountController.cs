@@ -225,11 +225,29 @@ namespace PlusAndComment.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
+
+            System.IO.File.WriteAllText(Server.MapPath("~/Storage/Log.txt"), "jakies gownos" + userId + " code" + code);
+
             if (userId == null || code == null)
             {
+                System.IO.File.WriteAllText(Server.MapPath("~/Storage/Log.txt"), "from ConfirmEmail method: userId " +userId + " code"+ code);
                 return View("Error");
             }
-            var result = UserManager.ConfirmEmail(userId, code);
+
+            IdentityResult result = null;
+
+            try
+            {
+                result = await UserManager.ConfirmEmailAsync(userId, code);
+            }
+            catch(Exception e)
+            {
+                System.IO.File.WriteAllText(Server.MapPath("~/Storage/Log.txt"), " var result = UserManager.ConfirmEmail(userId, code);" + " exception: " + e);
+
+            }
+
+            System.IO.File.WriteAllText(Server.MapPath("~/Storage/Log.txt"), result.Succeeded ? "ConfirmEmail" : "Error");
+
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 

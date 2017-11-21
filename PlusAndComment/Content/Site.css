@@ -687,8 +687,14 @@ textarea{
         }
 
         .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-            color: white;
+            color: white !important;
         }
+
+         .dropdown-menu > li > a
+         {
+             color: lightgrey;
+         }
+
         /*==============================================================================*/
 
         .maxW100{
@@ -698,3 +704,21 @@ textarea{
         .field-validation-error{ color: red; background-color: lightgrey; border-radius: 2px; padding: 2px 2px 2px 2px; margin-top: 2px;}
 
         .input-validation-error{ border: 1px solid red; }
+
+        a {
+            color: burlywood;
+        }
+
+        .gp-gif-element{
+            max-width: 100%;
+        }
+
+         .navbar-nav > .active{
+            color: #000;
+           background: #F88016;
+         }
+
+        .navbar-nav > li > a {
+            padding-bottom: 5px;
+            padding-top: 15px;
+        }

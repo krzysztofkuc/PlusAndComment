@@ -56,7 +56,10 @@ namespace PlusAndComment.App_Start
                 cfg.CreateMap<AddArticleVM, ArticleEntity>()
                 .ForMember(m => m.Url, opt => opt.MapFrom(c => c.Url));
 
-                cfg.CreateMap<ArticleEntity, AddArticleVM>();
+                cfg.CreateMap<ArticleEntity, AddArticleVM>()
+                .ForMember(x => x.FirstFrameGifRelativePath, opt => opt.Ignore())
+                .ForMember(x => x.EmbelVideoUrl, opt => opt.Ignore())
+                .ForMember(x => x.BigPictureUrl, opt => opt.Ignore());
 
                 cfg.CreateMap<SucharEntity, AddSucharVM>();
                 cfg.CreateMap<AddSucharVM, SucharEntity>();

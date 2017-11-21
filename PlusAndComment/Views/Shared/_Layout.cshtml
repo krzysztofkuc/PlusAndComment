@@ -12,10 +12,17 @@
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Trudny humor" />
     <meta property="og:description" content="Strona z czarnym humorem" />
-    <meta property="og:image" content="@Url.Content("~/Storage/logoFB.png")"/>
+    @*<meta property="og:image" content="@Url.Content("~/Storage/logoFB.png")"/>*@
     <meta property="og:image" content="../../Storage/logo.png" />
     <link rel="icon" href="@Url.Content("~/Storage/logoIcon.ico")">
-    <link rel="image_src" href="@Url.Content("~/Storage/logoFB.png")" />
+
+    @functions 
+    {
+        public string CheckActive(string actionName, string controllerName)
+        {
+            return (ViewContext.RouteData.Values["action"].ToString().ToLower() == actionName.ToLower() && ViewContext.RouteData.Values["controller"].ToString().ToLower() == controllerName.ToLower()) ? "active".ToString() : "".ToString();
+        }
+    }
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -30,12 +37,12 @@
                 <a href='@Url.Action("index", "Home")'>
                     <img src='@Url.Content("~/Storage/logo.png")' style="max-height: 50px;"/>
                 </a>
-                @*@Html.ActionLink("Trudne żarty", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    @*<li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>*@
+                    <li class="@CheckActive("Articles", "Home")"style="padding-top: 9px;"><a href="/Home/Articles" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="glyphicon glyphicon-list-alt" style="padding-right: 5px;"></span>Z sieci</a></li>
+                    <li class="@CheckActive("Suchary", "Home")" style="padding-top: 9px;"><a href="/Home/Suchary" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Suchary</a></li>
+                    <li class="@CheckActive("MemGenerator", "Home")" style="padding-top: 9px;"><a href="/Home/MemGenerator" style="font-size: 18px; font-weight: bold; display: inline-block; width: 100%;"><span class="fa fa-meh-o fa-lg" style="padding-right: 5px;"></span>Generator memów</a></li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -44,7 +51,8 @@
             Skopiowano
         </div>
     </div>
-    
+
+
     <div class="container body-content">
         @RenderBody()
         <hr />
@@ -55,6 +63,8 @@
 
     
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/site")
     @RenderSection("scripts", required: false)
 </body>
 </html>

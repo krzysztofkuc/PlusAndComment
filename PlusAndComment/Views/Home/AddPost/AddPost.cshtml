@@ -13,14 +13,6 @@
             <hr />
             @Html.ValidationSummary(true)
             <div style="text-align: center;">
-
-                @*@Html.HiddenFor(m => m.Header, new { id = "imageSourceHeader" })
-                @Html.HiddenFor(m => m.FilePath, new { id = "filePath" })
-                @Html.HiddenFor(m => m.Type, new { id = "postType" })
-                @Html.HiddenFor(m => m.EmbedUrl, new { id = "embedUrl" })
-                @Html.HiddenFor(m => m.ReferenceUrl, new { id = "referenceUrl" })
-                @Html.HiddenFor(m => m.Tab, new { id = "tab" })*@
-
                 <div id="AddNewPost" class="center" style="padding: 20px 20px 20px 20px;">
 
                     <!-- Zakładki -->
@@ -56,217 +48,267 @@
                     </div>
                 </div>
             </div>
-
-
         <div>
             @Html.ActionLink("Wróć do strony głównej", "Index")
         </div>
+
 @Scripts.Render("~/bundles/jqueryval")
 
-    <script>
+<script>
 
-        $('.contentLink').on('paste', function (event) {
-            var self = $(this);
+    $('.contentLink').on('paste', function (event) {
+        var self = $(this);
 
-            setTimeout(function () { target(self) }, 100);
+        setTimeout(function () { target(self) }, 100);
 
-        });
+    });
 
-        function target(elem)
-        {
-            contentLinkChanged(elem.val())
-        }
+    function target(elem) {
+        contentLinkChanged(elem.val())
+    }
 
-        function hideBottomBtnsAddPost()
-        {
-            $("#confirmButtonsAddPost").hide();
-        }
+    $('#contentLinkArticle').on('paste', function (event) {
+        var self = $(this);
 
-        function showBottomBtnsAddPost() {
-            $("#confirmButtonsAddPost").show();
-        }
+        setTimeout(function () { targetArticleUrl(self) }, 100);
 
-            function contentLinkChanged(value) {
-                $.ajax({
-                    url: 'FindWebSite',
-                    dataType: 'json',
-                    data: { selectedValue: value },
-                    beforeSend: function () {
-                        $("#loadingPageThumb").show();
-                        $("#AddNewPostContent").show();
+    });
+
+    function targetArticleUrl(elem) {
+        contentLinkArticleChanged(elem.val())
+    }
+
+    function hideBottomBtnsAddPost()
+    {
+        $("#confirmButtonsAddPost").hide();
+    }
+
+    function showBottomBtnsAddPost() {
+        $("#confirmButtonsAddPost").show();
+    }
+
+        function contentLinkChanged(value) {
+            $.ajax({
+                url: 'FindWebSite',
+                dataType: 'json',
+                data: { selectedValue: value },
+                beforeSend: function () {
+                    $("#loadingPageThumb").show();
+                    $("#AddNewPostContent").show();
+                    $(".imageThumb_AddLinkPreview").hide();
+                    $("#addPostButton").attr("disabled", true);
+                },
+                complete: function (post){$("#loadingPageThumb").hide();},
+                success: function (post) {
+                    $("#addPostButton").attr("disabled", false);
+                    if (post.Type == "mov") {
+                        $("#postType").val("mov");
+                        $("#embedUrl").val(post.EmbedUrl);
+                        $("#movieThumb").attr("src", post.EmbedUrl);
+                        $("#referenceUrl").val(post.ReferenceUrl);
+                        $("#lblUrl").html(post.Url);
                         $(".imageThumb_AddLinkPreview").hide();
-                        $("#addPostButton").attr("disabled", true);
-                    },
-                    complete: function (post){$("#loadingPageThumb").hide();},
-                    success: function (post) {
-                        $("#addPostButton").attr("disabled", false);
-                        if (post.Type == "mov") {
-                            $("#postType").val("mov");
-                            $("#embedUrl").val(post.EmbedUrl);
-                            $("#movieThumb").attr("src", post.EmbedUrl);
-                            $("#referenceUrl").val(post.ReferenceUrl);
-                            $("#lblUrl").html(post.Url);
-                            $(".imageThumb_AddLinkPreview").hide();
-                            $("#movieThumb").show();
+                        $("#movieThumb").show();
 
-                            //gif
-                        }else if (post.Type == "gif") {
-                            $("#postType").val("gif");
-                            //var newpath = "../../../../" + post.EmbedUrl;
-                            var hhhg = "~/Storage/" + post.EmbedUrl;
-                            $("#embedUrl").val('@Url.Content("~/Storage/")' + post.EmbedUrl);
-                            $("#referenceUrl").val(post.FirstFramePathRelative);
-                            $("#lblUrl").html(post.Url);
-                            $(".imageThumb_AddLinkPreview").attr("src", "@Url.Content("~/Storage/")" + post.FileName);
-                            $(".imageThumb_AddLinkPreview").show();
-                            $("#movieThumb").hide();
-                        }else if (post.Type == "img") {
-                            $("#postType").val("img");
-                            $("#lblUrl").html(post.Url);
-                            $("#filePath").val(post.FilePath);
-                            $(".imageThumb_AddLinkPreview").attr("src", post.Url);
-                            $("#referenceUrl").val(post.ReferenceUrl);
-                            $(".imageThumb_AddLinkPreview").show();
-                            $("#movieThumb").hide();
-                        }
-
-                        var header = "<h style='font-weight: bold'>" + post.Header + "</h>";
-                        if (!(header.indexOf("null") !== -1))
-                        {
-                            $("#imageTitle").html(header).text();
-                        }
-
-                        $("#imageSourceHeader").val(post.Header).text();
-                        $('#addPostButton').attr("disabled", false);
-                    },
-                    failure: function (error) {
+                        //gif
+                    }else if (post.Type == "gif") {
+                        $("#postType").val("gif");
+                        //var newpath = "../../../../" + post.EmbedUrl;
+                        var hhhg = "~/Storage/" + post.EmbedUrl;
+                        $("#embedUrl").val('@Url.Content("~/Storage/")' + post.EmbedUrl);
+                        $("#referenceUrl").val(post.FirstFramePathRelative);
+                        $("#lblUrl").html(post.Url);
+                        $(".imageThumb_AddLinkPreview").attr("src", "@Url.Content("~/Storage/")" + post.FileName);
+                        $(".imageThumb_AddLinkPreview").show();
+                        $("#movieThumb").hide();
+                    }else if (post.Type == "img") {
+                        $("#postType").val("img");
+                        $("#lblUrl").html(post.Url);
+                        $("#filePath").val(post.FilePath);
+                        $(".imageThumb_AddLinkPreview").attr("src", post.Url);
+                        $("#referenceUrl").val(post.ReferenceUrl);
+                        $(".imageThumb_AddLinkPreview").show();
+                        $("#movieThumb").hide();
                     }
-                });
-            }
 
-            $(document).ready(function () {
-            $("#imageUploadForm").change(function () {
-                var formData = new FormData();
-                var totalFiles = document.getElementById("imageUploadForm").files.length;
-                for (var i = 0; i < totalFiles; i++)
-                {
-                    var file = document.getElementById("imageUploadForm").files[i];
-                    formData.append("imageUploadForm", file);
+                    var header = "<h style='font-weight: bold'>" + post.Header + "</h>";
+                    if (!(header.indexOf("null") !== -1))
+                    {
+                        $("#imageTitle").html(header).text();
+                    }
+
+                    $("#imageSourceHeader").val(post.Header).text();
+                    $('#addPostButton').attr("disabled", false);
+                },
+                failure: function (error) {
                 }
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("Upload", "Home")',
-                    data: formData,
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    success: function (post) {
-                        var type = post.Type;
-                        var gifUrl = post.postUrl;
-                        var imgUrl = post.ImageUrl;
-                        var referenceUrl = post.ReferenceUrl;
-                        $("#postType").val(type);
-
-                        if (type == "gif") {
-                            $("#imageThumb_AddLinkPreview").attr("src", gifUrl);
-                        }
-                        else { $("#imageThumb_AddLinkPreview").attr("src", referenceUrl); }
-
-                        $('#filePath').val(gifUrl);
-                        $("#embedUrl").val(gifUrl);
-                        $("#referenceUrl").val(referenceUrl);
-                        $("#AddNewPostContent").show();
-                        $('#addPostButton').attr("disabled", false);
-                    },
-                    error: function (error) {
-                        alert("errror");
-                    }
-                });
             });
-            });
-
-            $(document).ready(function () {
-                $("#userImageUploadForm").change(function () {
-                    var formData = new FormData();
-                    var totalFiles = document.getElementById("userImageUploadForm").files.length;
-                    for (var i = 0; i < totalFiles; i++) {
-                        var file = document.getElementById("userImageUploadForm").files[i];
-                        formData.append("userImageUploadForm", file);
-                    }
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("Upload", "Home")",
-                        data: formData,
-                        dataType: 'json',
-                        contentType: false,
-                        processData: false,
-                        beforeSend: function ()
-                        {
-                            $("#UserPhotoPreview").hide();
-                            $("#loadingAddPostPhoto").show();
-                            $('#addPostButton').attr("disabled", true);
-                        },
-                        success: function (post) {
-                            //is GIF
-                            if (post.Type == 'gif') {
-                                $(".imageThumb_UserPhotoPreview").attr("src", post.PathRelative);
-                                $(".gifReferenceUrl").val(post.PathRelative);
-                                $("#firstFramePathRelative").val(post.FirstFramePathRelative);
-                            }
-                            else {
-                                $(".imageThumb_UserPhotoPreview").attr("src", post.PathRelative);
-                                $(".photoReferenceUrl").val(post.PathRelative);
-                            }
-
-                            $(".postTypeImageUpload").val(post.Type);
-                            $("#UserPhotoPreview").show();
-                            $("#loadingAddPostPhoto").hide();
-                            $('#addPostButton').attr("disabled", false);
-                        },
-                        error: function (error) {
-                            alert("errror");
-                        }
-                    });
-                });
-            });
+        }
 
         $(document).ready(function () {
-            $("#imageUploadFormArticle").change(function () {
+        $("#imageUploadForm").change(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("imageUploadForm").files.length;
+            for (var i = 0; i < totalFiles; i++)
+            {
+                var file = document.getElementById("imageUploadForm").files[i];
+                formData.append("imageUploadForm", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Upload", "Home")',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (post) {
+                    var type = post.Type;
+                    var gifUrl = post.postUrl;
+                    var imgUrl = post.ImageUrl;
+                    var referenceUrl = post.ReferenceUrl;
+                    $("#postType").val(type);
+
+                    if (type == "gif") {
+                        $("#imageThumb_AddLinkPreview").attr("src", gifUrl);
+                    }
+                    else { $("#imageThumb_AddLinkPreview").attr("src", referenceUrl); }
+
+                    $('#filePath').val(gifUrl);
+                    $("#embedUrl").val(gifUrl);
+                    $("#referenceUrl").val(referenceUrl);
+                    $("#AddNewPostContent").show();
+                    $('#addPostButton').attr("disabled", false);
+                },
+                error: function (error) {
+                    alert("errror");
+                }
+            });
+        });
+        });
+
+        $(document).ready(function () {
+            $("#userImageUploadForm").change(function () {
                 var formData = new FormData();
-                var totalFiles = document.getElementById("imageUploadFormArticle").files.length;
+                var totalFiles = document.getElementById("userImageUploadForm").files.length;
                 for (var i = 0; i < totalFiles; i++) {
-                    var file = document.getElementById("imageUploadFormArticle").files[i];
-                    formData.append("imageUploadFormArticle", file);
+                    var file = document.getElementById("userImageUploadForm").files[i];
+                    formData.append("userImageUploadForm", file);
                 }
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("Upload","Home")',
+                    url: "@Url.Action("Upload", "Home")",
                     data: formData,
                     dataType: 'json',
                     contentType: false,
                     processData: false,
                     beforeSend: function ()
                     {
-                        $('#loadingAddPostArticlePhoto').show();
+                        $("#UserPhotoPreview").hide();
+                        $("#loadingAddPostPhoto").show();
+                        $('#addPostButton').attr("disabled", true);
                     },
                     success: function (post) {
-                        if (post.Type != "png" && post.Type != "bmp" && post.Type != "jpg") {
-                            alert("Plik może być tylko w formacie jpg, png lub bmp");
-                            return;
+                        //is GIF
+                        if (post.Type == 'gif') {
+                            $(".imageThumb_UserPhotoPreview").attr("src", post.PathRelative);
+                            $(".gifReferenceUrl").val(post.PathRelative);
+                            $("#firstFramePathRelative").val(post.FirstFramePathRelative);
                         }
-                        $("#postType").val(post.Type);
-                        $('#RelThumbPath').val("@Url.Content("~/Storage/")" + post.FileName);
-                        $('#RelFilePath').html(post.FileName);
-                    },
-                    complete: function ()
-                    {
-                        $('#loadingAddPostArticlePhoto').hide();
+                        else {
+                            $(".imageThumb_UserPhotoPreview").attr("src", post.PathRelative);
+                            $(".photoReferenceUrl").val(post.PathRelative);
+                        }
+
+                        $(".postTypeImageUpload").val(post.Type);
+                        $("#UserPhotoPreview").show();
+                        $("#loadingAddPostPhoto").hide();
+                        $('#addPostButton').attr("disabled", false);
                     },
                     error: function (error) {
                         alert("errror");
-                        $('#loadingAddPostArticlePhoto').hide();
                     }
                 });
             });
         });
-    </script>
+
+    $(document).ready(function () {
+        $("#imageUploadFormArticle").change(function () {
+            var formData = new FormData();
+            var totalFiles = document.getElementById("imageUploadFormArticle").files.length;
+            for (var i = 0; i < totalFiles; i++) {
+                var file = document.getElementById("imageUploadFormArticle").files[i];
+                formData.append("imageUploadFormArticle", file);
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Upload","Home")',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                beforeSend: function ()
+                {
+                    $('#loadingAddPostArticlePhoto').show();
+                },
+                success: function (post) {
+                    $("#ArticleThumType").val(post.Type);
+
+                    if (post.Type == 'gif') {
+                        $('#FirstFrameGifRelativePath').val("@Url.Content("~/Storage/")" + post.FileName);
+                        $('#RelFilePath').html(post.FileName);
+                    }
+                    else if (post.Type == 'img') {
+                        $('#RelThumbPath').val("@Url.Content("~/Storage/")" + post.FileName);
+                        $('#RelFilePath').html(post.FileName);
+
+                    }else if(post.Type == 'mov')
+                    {
+
+                    }
+
+                    $("#EmbelVideoUrl").val(post.Type);                    
+                },
+                complete: function ()
+                {
+                    $('#loadingAddPostArticlePhoto').hide();
+                },
+                error: function (error) {
+                    alert("errror");
+                    $('#loadingAddPostArticlePhoto').hide();
+                }
+            });
+        });
+    });
+
+    function contentLinkArticleChanged(value) {
+        $.ajax({
+            url: 'FindWebSite',
+            dataType: 'json',
+            data: { selectedValue: value },
+            complete: function (post){$("#loadingPageThumb").hide();},
+            success: function (post) {
+                if (post.Type == "mov") {
+                    $("#AddArticleThumbPhoto").hide();
+
+                    $("#EmbelVideoUrl").val(post.EmbedUrl);
+                    $("#RelThumbPath").val(post.EmbedUrl);
+                    $("#ArticleThumType").val(post.Type);
+                    
+                    //$("#postType").val("mov");
+                    //$("#embedUrl").val(post.EmbedUrl);
+                    //$("#movieThumb").attr("src", post.EmbedUrl);
+                    //$("#referenceUrl").val(post.ReferenceUrl);
+                    //$("#lblUrl").html(post.Url);
+                    //$(".imageThumb_AddLinkPreview").hide();
+                    //$("#movieThumb").show();
+                }
+                else
+                {
+                    $("#AddArticleThumbPhoto").show();
+                }
+            },
+            failure: function (error) {
+            }
+        });
+    }
+</script>

@@ -30,6 +30,15 @@ namespace PlusAndComment.Models.AddPostVMs
         [Required]
         public string RelThumbPath { get; set; }
 
+        [Required]
+        public string ThumbType { get; set; }
+
+        public string FirstFrameGifRelativePath { get; set; }
+
+        public string EmbelVideoUrl { get; set; }
+
+        public string BigPictureUrl { get; set; }
+
         public virtual ApplicationUser ApplicationUser { get; set; }
     }
 }

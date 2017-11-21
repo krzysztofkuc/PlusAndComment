@@ -4,7 +4,7 @@
     <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Debug\\Package\\PackageTmp$" />
     <parameterEntry kind="ProviderPath" scope="setAcl" match="^D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Debug\\Package\\PackageTmp$" />
   </parameter>
-  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." value="Data Source=mssql5.webio.pl,2401;Initial Catalog=chrisk_trudnedb;User ID=chrisk_chrisk;Password=Ziemniaki1!.;Integrated Security=False" tags="SqlConnectionString">
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." value="Data Source=(LocalDb)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\aspnet-PlusAndComment-20170510064003.mdf;Initial Catalog=aspnet-PlusAndComment-20170510064003;Integrated Security=True" tags="SqlConnectionString">
     <parameterEntry kind="XmlFile" scope="D:\\Repositories\\PlusAndComment\\PlusAndComment\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
 </parameters>
