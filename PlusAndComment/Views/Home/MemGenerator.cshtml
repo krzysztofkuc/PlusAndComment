@@ -10,48 +10,27 @@
     <div ng-app="myApp" ng-controller="myCtrl">
 
         <div class="container">
-            @*@model PlusAndComment.Models.AddPostVMs.AddPictureFromDiskVM*@
 
-            <div class="col-md-12">
+            <div class="col-md-12 text-center">
                 <hr>
-            </div>
+                <div class="center">
+                    <label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn btn-orange">
+                        <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;<i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie / GIF
+                    </label>
+                    <input type="file" id="userImageUploadForm" name="myFile" class="custom-file-upload" file-upload />
+                </div>
 
-            @using (Html.BeginForm("AddPostPicturefromDisk", "Home", FormMethod.Post, new { @id = "AddPost" }))
-            {
-                @*@Html.HiddenFor(m => m.Type, new { @class = "postTypeImageUpload" })
-                @Html.HiddenFor(m => m.Picture.PathRelative, new { @class = "photoReferenceUrl" })
-                @Html.HiddenFor(m => m.Gif.PathRelative, new { @class = "gifReferenceUrl" })
-                @Html.HiddenFor(m => m.Gif.FirstFramePathRelative, new { id = "firstFramePathRelative" })*@
+                <img id="start-image" style="display: none" src="" alt="" imageOnload />
 
-                @*<div style="padding: 24px 10px 10px 10px">*@
-                    @*<label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn btn-orange">
-                        <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;<i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie / GIF*@
-                    @*</label>*@
-                    @*<input type="file" id="userImageUploadForm" class="custom-file-upload " ng-change="ImageUpload()"/>*@
-                    @*@{ Html.RenderPartial(Url.Content("~\\Views\\Home\\AddPost\\Partials\\_PictureFromDiskPreviewPartial.cshtml"), Model, new ViewDataDictionary() { { "id", "UserPhotoPreview" } });}*@
-                    @*<div class="text-right">
-                        <input type="submit" value="Dodaj" class="btn btn-default" style="margin: 10px 10px 10px 10px" />
-                    </div>*@
-
-                    @*<img id="loadingAddPostPhoto" src="~/Storage/ajax-loader.gif" style="display: none; padding-right: 30px" />
-                </div>*@
-            }
-
-            <label for="userImageUploadForm" style="margin-top: 10px" class="custom-file-upload normalBtn btn btn-orange">
-    <i class="glyphicon glyphicon-plus-sign"></i>&nbsp;<i class="glyphicon glyphicon-picture"></i>&nbsp;Zdjęcie / GIF
-            </label>
-            <input type="file" id="userImageUploadForm" name="myFile" class="custom-file-upload" file-upload />
-
-            <img id="start-image" style="display: none" src="" alt="" />
-
-            <div class="col-md-12">
-                <canvas id="memecanvas"
-                        ng-mousedown="handleMouseDown($event)"
-                        ng-mouseup="handleMouseUp($event)"
-                        ng-mouseout="handleMouseOut($event)"
-                        ng-mouseMove="handleMouseMove($event)">
-                    Sorry, canvas not supported
-                </canvas>
+                <div class="col-md-12">
+                    <canvas id="memecanvas"
+                            ng-mousedown="handleMouseDown($event)"
+                            ng-mouseup="handleMouseUp($event)"
+                            ng-mouseout="handleMouseOut($event)"
+                            ng-mouseMove="handleMouseMove($event)">
+                        Sorry, canvas not supported
+                    </canvas>
+                </div>
             </div>
 
             <div class="col-md-12">
@@ -68,9 +47,7 @@
 
             <div class="col-md-4">
                 
-                    Tło górne:
-                
-                    <input max={{MaxHeightBckg}} min=0 step="1" type="range" ng-model="bckgTop" ng-change="drawText()" />
+                    Tło górne: <input max={{MaxHeightBckg}} min=0 step="1" type="range" ng-model="bckgTop" ng-change="drawText()" />
                 
                     <span style="display: block">Tło dolne: <input max={{MaxHeightBckg}} min=0 step="1" type="range" ng-model="bckgBottom" ng-change="drawText()" /></span>
                     <span style="display: block;">Wielkość czcnionki: <input max=50 min=0 step="1" type="range" ng-model="fontSize" ng-change="drawText()" /></span>
@@ -88,75 +65,57 @@
 
     app.controller('myCtrl', function ($scope, $http) {
 
-	var canvas = document.getElementById('memecanvas');
+        var canvas = document.getElementById('memecanvas');
+        canvas.width = 1;
+        canvas.height = 1;
 	var ctx = canvas.getContext('2d');
-	var img = document.getElementById('start-image');
-	var rect = canvas.getBoundingClientRect();
-	var offsetX = rect.left;
-	var offsetY = rect.top;
+    var img = document.getElementById('start-image');
 	var startX = 0;
 	var startY = 0;
 	var selectedText = -1;
-	$scope.canvasMaxWidth = 480;
-	$scope.canvasMaxHeight = 640;
+	$scope.canvasMaxWidth = 640;
+	$scope.canvasMaxHeight = 480;
 	var x = null;
-	var y = null;
+    var y = null;
+    var offsetX = null;
+    var offsetY = null;
+    $scope.scale = 1;
+    $scope.MaxHeightBckg = null;
+    $scope.bckgTop = this.MaxHeightBckg;
+    $scope.bckgBottom = this.MaxHeightBckg;
+    $scope.canvasMaxWidth = 640;
+    $scope.canvasMaxHeight = 480;
+    $scope.fontSize = 10;
 
-
-	img.onload= function () 
-	{
-
-	    //$scope.FitImgToCanvas(img);
-
-	    $scope.MaxHeightBckg = img.height ;
-	    $scope.bckgTop = this.MaxHeightBckg;
-	    $scope.bckgBottom = this.MaxHeightBckg;
-	    $scope.fontSize = img.width / 13;
-	    $scope.imageUrl = "";
-
-	    $scope.canvasMaxWidth = 480;
-	    $scope.canvasMaxHeight = 640;
-
-	    x = canvas.width/2 - img.width/2;
-	    y = canvas.height/2 - img.height/2;
+	img.onload= function (e) 
+    {
+        $scope.MaxHeightBckg = img.height / 7;
 
 	    var deviceWidth = window.innerWidth;;
-	    canvasWidth = Math.min($scope.canvasMaxHeight, deviceWidth-20);
-	    canvasHeight = Math.min($scope.canvasMaxWidth, deviceWidth-20);
+	    canvasWidth = Math.min($scope.canvasMaxWidth, deviceWidth-20);
+        canvasHeight = Math.min($scope.canvasMaxHeight, deviceWidth - 20);
 
-	    canvas.width = canvasWidth;
-	    canvas.height = canvasHeight;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
-	    x = canvas.width / 2 - img.width / 2;
-	    y = canvas.height / 2 - img.height / 2;
+        var rect = canvas.getBoundingClientRect();
+        offsetX = rect.left;
+        offsetY = rect.top;
+
+        $scope.scale = $scope.getScaleToCanvas(img);
+        $scope.fontSize = img.width / 13 * $scope.scale;
+
+        x = canvas.width / 2 - img.width * $scope.scale / 2;
+        y = canvas.height / 2 - img.height * $scope.scale / 2;
 
 	    $scope.texts = [
-            { textX: "", x: x + 10, y: y - $scope.fontSize * 2.2 },
             { textX: "", x: x + 10, y: y - $scope.fontSize * 1.2 },
-            { textX: "", x: x + 10, y: y + img.height },
-            { textX: "", x: x + 10, y: y + img.height + $scope.fontSize * 1.2 }
+            { textX: "", x: x + 10, y: y + $scope.fontSize * 1.2 },
+            { textX: "", x: x + 10, y: y + (img.height * $scope.scale)  },
+            { textX: "", x: x + 10, y: y + (img.height * $scope.scale) + $scope.fontSize * 1.2 }
 	    ];
-
-	    $scope.drawText();
-	}
-
-	$scope.FitImgToCanvas = function (img)
-	{
-	    if (img.width >= $scope.canvasMaxWidth)
-	    {
-	        var scale = img.width / $scope.canvasMaxWidth;
-
-	        img.width = img.width * scale * 0.8;
-	        img.height = img.height * scale * 0.8;
-
-	    }
-	    
-	    if (img.height >= $scope.canvasMaxHeight * 1.6)
-	    {
-	        var scale = img.height / $scope.canvasMaxHeight;
-	        img.width = img.width * scale * 0.8;
-	        img.height = img.height * scale * 0.8;
-	    }
+        
+        $scope.drawText();
 	}
 
 	$scope.textHittest = function(x, y, textIndex) {
@@ -175,7 +134,7 @@
 
 		// Put your mousedown stuff here
 		for (var i = 0; i < this.texts.length; i++) {
-			this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/6;
+			this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/10;
 			this.texts[i].height = this.fontSize;
 
 			if (this.textHittest(startX, startY, i)) {
@@ -197,7 +156,7 @@
 
 	for (var i = 0; i < this.texts.length; i++) {
 
-		this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/8;
+		this.texts[i].width = ctx.measureText(this.texts[i].textX).width *  this.fontSize/10;
 		this.texts[i].height = this.fontSize;
 		mX = parseInt(e.clientX - offsetX);
 		mY = parseInt(e.clientY - offsetY);
@@ -222,7 +181,7 @@
 			return;
 		}
 
-		e.preventDefault();
+		//e.preventDefault();
 		mouseX = parseInt(e.clientX - offsetX);
 		mouseY = parseInt(e.clientY - offsetY);
 
@@ -235,36 +194,46 @@
 		var text = this.texts[selectedText];
 		text.x += dx;
 		text.y += dy;
-		this.drawText();
+        $scope.drawText();
 	}
+
+    $scope.getScaleToCanvas = function (imgLocal) {
+
+        var scale = 1;
+
+        if (imgLocal.width >= $scope.canvasMaxWidth) {
+            scale = $scope.canvasMaxWidth / imgLocal.width;
+
+            if (imgLocal.height * scale >= $scope.canvasMaxHeight) {
+                scale -= $scope.canvasMaxHeight / (imgLocal.height * scale);
+            }
+        } else if (imgLocal.height >= $scope.canvasMaxHeight) {
+            scale = $scope.canvasMaxHeight / img.height;
+            if (imgLocal.width * scale >= $scope.canvasMaxWidth) {
+                scale -= $scope.canvasMaxWidth / (imgLocal.width * scale);
+            }
+        }
+
+        var newImgHeight = canvas.height - ((img.height * scale) * 0.25);
+
+        var scaleX = newImgHeight / canvas.height;
+
+        scale = scale * scaleX;
+
+        return scale;
+    }
 
   $scope.drawText = function() {
 
 	ctx.save();
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	var img = document.getElementById('start-image');
-    
-	var imgW = null;
-	var imgH = null;
+    //var img = document.getElementById('start-image');
 
-	if (img.width >= $scope.canvasMaxWidth)
-	{
-	    var scale = img.width / $scope.canvasMaxWidth;
+    x = (canvas.width / 2) - (img.width / 2 * $scope.scale);
+    y = (canvas.height / 2) - (img.height / 2 * $scope.scale);
 
-	    imgW = img.width * scale * 0.8;
-	    imgH = img.height * scale * 0.8;
-
-	}
-	    
-	if (img.height >= $scope.canvasMaxHeight * 1.6)
-	{
-	    var scale = img.height / $scope.canvasMaxHeight;
-	    imgW = img.width * scale * 0.8;
-	    imgH = img.height * scale * 0.8;
-	}
-
-	ctx.drawImage(img, 0,0,imgW, imgH, 0, 0, img.width, img.height);
+    ctx.drawImage(img, 0, 0, img.width, img.height, x, y, img.width * $scope.scale, img.height * $scope.scale);
     ctx.fillStyle = "white";
 	ctx.strokeStyle = "black";
 	ctx.stroke();
@@ -274,15 +243,15 @@
     ctx.textBaseline = 'top';
 
 	//draw bckg
-	ctx.fillStyle = "black";
-	ctx.fillRect(x, y + img.height, img.width, this.bckgBottom);
-	ctx.fillRect(x, y, img.width, -this.bckgTop);
+    ctx.fillStyle = "black";
+    ctx.fillRect(x, y + img.height * $scope.scale, img.width * $scope.scale, this.bckgBottom);
+    ctx.fillRect(x, y, img.width * $scope.scale, -this.bckgTop);
 
 	//Draw text
 	ctx.fillStyle = "white";
-	angular.forEach(this.texts, function(txt){
-		ctx.strokeText(txt.textX, txt.x, txt.y);
-       ctx.fillText(txt.textX, txt.x, txt.y);
+    angular.forEach(this.texts, function (txt) {
+        ctx.strokeText(txt.textX, txt.x, txt.y);
+        ctx.fillText(txt.textX, txt.x, txt.y);
 	});
 
 	ctx.restore();
