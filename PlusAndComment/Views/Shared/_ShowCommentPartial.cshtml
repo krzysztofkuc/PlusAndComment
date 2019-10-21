@@ -53,7 +53,7 @@
     </div>
 </div>
 <div id="leaveCommentPartial_@(Model.ID)" style="display: none">
-    @Html.Action("LeaveComment", new { id = Model.ID })
+    @Html.Action("LeaveComment", new { id = Model.ID, type = ViewData["postType"], isMainComment = ViewData["isMainComment"] })
 </div>
 
 <div id="targetXXX_@(Model.ID)"></div>
@@ -66,7 +66,7 @@
         if (ViewBag.showAllComments == false || ViewData["showAllPosts"] == "false" ) { break; }
 
         <div id="abc_@(item.ID)" style="margin-left: 20px;">
-            @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", ViewData["showAllPosts"] }})
+            @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", ViewData["showAllPosts"] }, {"postType", ViewData["postType"] }, { "isMainComment", false } })
         </div>
     }
 }

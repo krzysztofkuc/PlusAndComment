@@ -1,13 +1,11 @@
-﻿using System.Data.Entity;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using PlusAndComment.Models.Entities;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.Owin.Security;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace PlusAndComment.Models
 {
@@ -49,6 +47,7 @@ namespace PlusAndComment.Models
         public virtual DbSet<UserPosts> UserPosts { get; set; }
         public virtual DbSet<ArticleEntity> Articles { get; set; }
         public virtual DbSet<SucharEntity> Suchary { get; set; }
+        public virtual DbSet<MainMems> MainMems { get; set; }
         public virtual DbSet<UserProfileSettings> UserProfileSettings { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)

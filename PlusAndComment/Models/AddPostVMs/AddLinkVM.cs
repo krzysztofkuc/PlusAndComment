@@ -27,5 +27,7 @@ namespace PlusAndComment.Models.AddPostVMs
         public string Header { get; set; }
 
         public string Type { get; set; }
+
+        public string CommentParent { get { return UIPostType.MainMeme.ToFriendlyString(); } }
     }
 }

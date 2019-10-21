@@ -4,7 +4,7 @@
     foreach (var item in Model.Posts)
     {
         <div id="abc_@(item.ID)">
-            @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", "true" } })
+            @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", "true" }, { "isMainComment", false } })
         </div>
     }
 }

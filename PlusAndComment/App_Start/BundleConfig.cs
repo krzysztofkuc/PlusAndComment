@@ -8,8 +8,8 @@ namespace PlusAndComment
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
-            "~/Scripts/angular.min.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/angularjs").Include(
+            //"~/Scripts/angular.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                         "~/Scripts/site.js",

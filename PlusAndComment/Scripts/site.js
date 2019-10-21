@@ -19,6 +19,25 @@
     return false;
 }
 
+function showleaveMainComment(id, isAuth) {
+    if (!isAuth) {
+        alert("Nie jesteś zalogowany")
+        return false;
+    }
+
+    var obj = $("#leaveMainCommentPartial_" + id);
+
+    var display = obj.css("display");
+    if (display != "none") {
+        obj.attr("style", "display:none");
+    }
+    else {
+        obj.attr("style", "display:block");
+    }
+
+    return false;
+}
+
 function OnAddCommentCoplete(id) {
     $("#wellLeaveComment_"+id).hide();
     return false;

@@ -31,19 +31,15 @@ namespace PlusAndComment.Controllers
         [HttpGet]
         [AllowAnonymous]
         public ActionResult Index(int page = 1, int pageSize = 10)
-        {
-            var posts = dbContext.Posts.OrderByDescending( m => m.ID).Where(m => m.PostEntity_ID == null && !m.Removed).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        { 
+            var posts = dbContext.MainMems.OrderByDescending( m => m.ID).Where(m => !m.PostEntity.Removed).Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             HomeVM homeVm = new HomeVM();
             homeVm.CurrentPage = page;
-            homeVm.PostsCapacity = dbContext.Posts.OrderByDescending(m => m.ID).Where(m => m.PostEntity_ID == null && !m.Removed).Count();
-            homeVm.Posts = AutoMapper.Mapper.Map<ICollection<PostEntity>,ICollection<MainPostVM>>(posts);
-            //var dbArticles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
-            //homeVm.Articles = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(dbArticles);
-            //var dbSuchary = dbContext.Suchary.OrderByDescending(m => m.Id).ToList();
-            //homeVm.Suchary = AutoMapper.Mapper.Map<ICollection<SucharEntity>, ICollection<SucharVM>>(dbSuchary);
+            homeVm.PostsCapacity = dbContext.MainMems.OrderByDescending(m => m.ID).Where(m => !m.PostEntity.Removed).Count();
+            homeVm.MainMems = AutoMapper.Mapper.Map<ICollection<MainMems>,ICollection<MainMemVM>>(posts);
 
-            var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+            //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
 
             if (User.Identity.IsAuthenticated)
@@ -59,7 +55,7 @@ namespace PlusAndComment.Controllers
                 }
             }
 
-            homeVm.Posts = JoinPostsWithUsers(homeVm.Posts);
+            //homeVm.Posts = JoinPostsWithUsers(homeVm.Posts);
 
             return View(homeVm);
         }
@@ -85,7 +81,23 @@ namespace PlusAndComment.Controllers
         public ActionResult Articles()
         {
             var articles = dbContext.Articles.OrderByDescending(m => m.Id).ToList();
+
+            //var articlesPosts = dbContext.Posts.Where(m => m.PostEntity_ID == null && m.PostType == UIPostType.Article.ToString()).ToList();
+
+            
+            ////var posts = dbContext.Posts.OrderByDescending(m => m.ID).Where(m => m.PostEntity_ID == null && !m.Removed && m.CommentParent == UIPostType.mainMeme.ToString()).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+
+            //List<MainPostVM> mappedComments = AutoMapper.Mapper.Map<ICollection<PostEntity>, ICollection<MainPostVM>>(articlesPosts).ToList();
+
             List<ArticleVM> mapedArt = AutoMapper.Mapper.Map<ICollection<ArticleEntity>, ICollection<ArticleVM>>(articles).ToList();
+
+            //foreach (var article in mapedArt)
+            //{
+            //    article.Posts = mappedComments.Where(m => m.PostEntity_ID == article.ID).ToList();
+            //}
+
+
 
             var articlesVM = new ArticlesVM();
             articlesVM.Articles = mapedArt;
@@ -105,14 +117,14 @@ namespace PlusAndComment.Controllers
             return RedirectToAction("Index");
         }
 
-        private ICollection<MainPostVM> JoinPostsWithUsers(ICollection<MainPostVM> posts)
+        private ICollection<MainMemVM> JoinPostsWithUsers(ICollection<MainMemVM> posts)
         {
             foreach (var post in posts)
             {
-                post.UsersVotesOnThisPost = dbContext.UserPosts.Where(m => m.IdPost == post.ID).Select(x => (ApplicationUser)x.User).ToList();
+                post.Post.UsersVotesOnThisPost = dbContext.UserPosts.Where(m => m.IdPost == post.ID).Select(x => (ApplicationUser)x.User).ToList();
 
-                if (post.Posts.Count > 0)
-                    JoinPostsWithUsers(post.Posts);
+                if (post.Post.Posts.Count > 0)
+                    JoinPostsWithUsers(post.Post.Posts);
             }
 
             return posts;
@@ -143,6 +155,25 @@ namespace PlusAndComment.Controllers
             postEntity.ApplicationUser_Id = User.Identity.GetUserId();
 
             dbContext.Posts.Add(postEntity);
+            dbContext.Entry(postEntity).State = EntityState.Added;
+
+            dbContext.SaveChanges();
+
+            var mainMem = AutoMapper.Mapper.Map<PostEntity>(post);
+
+
+            //ent.PostEntity_ID = parentPost.ID;
+            //parentPost.Posts.Add(ent);
+            //dbContext.Entry(ent).State = EntityState.Added;
+
+            //dbContext.Posts.Attach(parentPost);
+            //dbContext.Entry(parentPost).State = EntityState.Modified;
+
+            MainMems mm = new MainMems();
+            mm.PostEntity = postEntity;
+            dbContext.MainMems.Add(mm);
+            dbContext.Entry(mm).State = EntityState.Added;
+
             dbContext.SaveChanges();
 
             return RedirectToAction("Index");
@@ -205,6 +236,7 @@ namespace PlusAndComment.Controllers
         {
             var articleEnt = AutoMapper.Mapper.Map<AddArticleVM, ArticleEntity>(post);
             articleEnt.AddedTime = DateTime.Now;  
+            
 
             dbContext.Articles.Add(articleEnt);
 
@@ -217,25 +249,39 @@ namespace PlusAndComment.Controllers
         [Authorize]
         public ActionResult AddPost(AddPostVM post)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return View(post);
-            //}
+            if (!ModelState.IsValid)
+            {
+                return View(post);
+            }
 
-            //switch (post.Type)
-            //{
-            //    case UIPostType.link:
-            //        var newEnt = SavePostLink(post);
-            //        break;
-            //    case UIPostType.picture:
-            //        break;
-            //    case UIPostType.humour:
-            //        break;
-            //    case UIPostType.suchar:
-            //        break;
-            //    case UIPostType.article:
-            //        break;
-            //}
+            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
+            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+
+            switch (post.Type)
+            {
+                case UIPostType.MainMeme:
+                    if (post.Link.Url != null)
+                    {
+                        System.Uri uri = new Uri(post.Link.Url);
+
+                        if (!post.Link.Url.Contains("youtube") && !string.IsNullOrWhiteSpace(uri.Query))
+                        {
+                            post.Link.Url = uri.AbsoluteUri.Replace(uri.Query, string.Empty);
+                        }
+                    }
+
+                    dbContext.Posts.Add(postEntity);
+
+                    //var newEnt = SavePostLink(post);
+                    break;
+                case UIPostType.Humour:
+                    break;
+                case UIPostType.Suchar:
+                    break;
+                case UIPostType.Article:
+                    //dbContext.Articles.Add(postEntity);
+                    break;
+            }
 
             //================================================================================================
 
@@ -256,10 +302,9 @@ namespace PlusAndComment.Controllers
             //    }
             //}
 
-            var postEntity = AutoMapper.Mapper.Map<PostEntity>(post);
-            postEntity.ApplicationUser_Id = User.Identity.GetUserId();
+            
 
-            dbContext.Posts.Add(postEntity);
+            
             dbContext.SaveChanges();
             return RedirectToAction("Index", dbContext.Posts.ToList());
         }
@@ -403,10 +448,23 @@ namespace PlusAndComment.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult LeaveComment(string id)
+        public ActionResult LeaveComment(int id, string type, bool isMainComment)
         {
             MainPostVM newPost = new MainPostVM();
-            newPost.ID = Convert.ToInt16(id);
+
+            if (isMainComment)
+            {
+                newPost.Parent_ID = id;
+            }
+
+            newPost.PostEntity_ID = id;
+            newPost.isMainComment = isMainComment;
+
+
+            PostEntity parentPost = dbContext.Posts.FirstOrDefault(m => m.ID == id && m.PostType == type);
+            
+            newPost.CommentParent = parentPost?.CommentParent;
+            newPost.PostType = type;
 
             return PartialView("_LeaveCommentPartial", newPost);
         }
@@ -422,21 +480,64 @@ namespace PlusAndComment.Controllers
                 return PartialView("_LeaveCommentPartial",post);
             }
 
-            var parentPost = dbContext.Posts.Find(post.ID);
+            var parentPost = dbContext.Posts.FirstOrDefault(m => m.ID == post.PostEntity_ID && m.PostType == post.PostType);
 
             var user =  dbContext.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (user != null)
             {
-                parentPost.ApplicationUser_Id = user.Id;
+                //parentPost.ApplicationUser_Id = user.Id;
                 post.ApplicationUser_Id = user.Id;
             }
 
             var ent = AutoMapper.Mapper.Map<PostEntity>(post);
 
-            parentPost.Posts.Add(ent);
-            dbContext.Entry(ent).State = EntityState.Added;
-            dbContext.Posts.Attach(parentPost);
-            dbContext.Entry(parentPost).State = EntityState.Modified;
+            if (post.isMainComment)
+            {
+                switch(post.PostType)
+                {
+                    case "Article":
+                        ent.Article_ID = post.Parent_ID;
+                        post.Parent_ID = null;
+                        break;
+                    case "MainMeme":
+                        ent.MainMems_ID_Comment = post.Parent_ID;
+
+                        //problem when when attached main ameme and comment
+                        //ent.PostEntity_ID = null;
+                        post.Parent_ID = null;
+                        break;
+
+                }
+            }
+            //else
+            //{
+            //    switch (post.PostType)
+            //    {
+            //        case "Article":
+            //            ent.Article_ID = post.Parent_ID;
+            //            post.Parent_ID = null;
+            //            break;
+            //        case "MainMeme":
+            //            break;
+
+            //    }
+            //}
+
+            if (parentPost != null)
+            {
+                ent.PostEntity_ID = parentPost.ID;
+                parentPost.Posts.Add(ent);
+                dbContext.Entry(ent).State = EntityState.Added;
+
+                dbContext.Posts.Attach(parentPost);
+                dbContext.Entry(parentPost).State = EntityState.Modified;
+            }
+            else
+            {
+                dbContext.Posts.Add(ent);
+                dbContext.Entry(ent).State = EntityState.Added;
+            }
+
             dbContext.SaveChanges();
             post.ID = ent.ID;
 
@@ -452,17 +553,35 @@ namespace PlusAndComment.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult ShowAllMainPostComments(int id)
+        public ActionResult ShowAllMainPostComments(int id, string type)
         {
-            var post = dbContext.Posts.Find(id);
+            IQueryable post = null;
 
-            var postVM = AutoMapper.Mapper.Map<MainPostVM>(post);
+            switch (type)
+            {
+                case "Article":
+                    var article = dbContext.Articles.Find(id);
+                    var articleVM = AutoMapper.Mapper.Map<ArticleVM>(article);
+                    return PartialView("_ShowAllCommentsPartial", articleVM as MainPostVM);
+                case "MainPost":
+                    var mem = dbContext.Articles.Find(id);
+                    var memVM = AutoMapper.Mapper.Map<MainPostVM>(mem);
+                    return PartialView("_ShowAllCommentsPartial", memVM);
 
-            postVM.Posts = JoinPostsWithUsers(postVM.Posts);
+            }
+            //post = dbContext.Posts.FirstOrDefault(m => m.ID == id && m.PostType == UIPostType.Article.ToString());
+
+            //var post = dbContext.Posts.Find(id);
+
+            //var postVM = AutoMapper.Mapper.Map<MainPostVM>(post);
+
+            //postVM.Posts = JoinPostsWithUsers(postVM.Posts);
 
             //how to pass viewdictdata to view
             ViewBag.showAllComments = true;
-            return PartialView("_ShowAllCommentsPartial", postVM);
+            //return PartialView("_ShowAllCommentsPartial", postVM);
+
+            return null;
         }
 
         [HttpPost]
@@ -534,7 +653,7 @@ namespace PlusAndComment.Controllers
             string extension = Path.GetExtension(fullPath);
             string path = Path.GetDirectoryName(fullPath);
             string newFullPath = fullPath;
-
+            
             while (System.IO.File.Exists(newFullPath))
             {
                 string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);
@@ -848,9 +967,9 @@ namespace PlusAndComment.Controllers
             var posts = dbContext.Posts.Where(m => m.Removed == false && m.PostEntity_ID== null).OrderByDescending(m =>m.ID ).Skip(amount).Take(BlockSize).ToList();
 
             HomeVM homeVm = new HomeVM();
-            homeVm.Posts = AutoMapper.Mapper.Map<ICollection<PostEntity>, ICollection<MainPostVM>>(posts);
+            homeVm.MainMems = AutoMapper.Mapper.Map<ICollection<PostEntity>, ICollection<MainMemVM>>(posts);
 
-            homeVm.Posts = JoinPostsWithUsers(homeVm.Posts);
+            //homeVm.Posts = JoinPostsWithUsers(homeVm.Posts);
             if (User.Identity.IsAuthenticated)
             {
                 var currentUser = dbContext.Users.Find(User.Identity.GetUserId());
@@ -860,9 +979,9 @@ namespace PlusAndComment.Controllers
 
             StringBuilder resultHtml = new StringBuilder();
 
-            foreach (var item in homeVm.Posts)
+            foreach (var item in homeVm.MainMems)
             {
-                if (item.PostEntity_ID == null && !item.Removed)
+                if (item.Post.PostEntity_ID == null && !item.Post.Removed)
                 {
                     resultHtml.Append("<div class='row' style='margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;'>");
                     resultHtml.Append(RenderPartialViewToString("_PostPartial", item, homeVm.ShowNeedAgePics, amount));

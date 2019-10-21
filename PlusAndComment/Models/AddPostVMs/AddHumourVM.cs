@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PlusAndComment.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
+using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Models.AddPostVMs
 {
@@ -9,6 +11,8 @@ namespace PlusAndComment.Models.AddPostVMs
         [Required]
         public string Content { get; set; }
 
-        public string PostType { get { return "img"; } }
+        public string Type { get { return "img"; } }
+
+        public string CommentParent { get { return UIPostType.Humour.ToFriendlyString(); } }
     }
 }

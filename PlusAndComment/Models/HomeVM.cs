@@ -5,7 +5,7 @@ namespace PlusAndComment.Models
 {
     public class HomeVM
     {
-        public ICollection<MainPostVM> Posts { get; set; }
+        public ICollection<MainMemVM> MainMems { get; set; }
         public ICollection<ArticleVM> Articles { get; set; }
         public ICollection<SucharVM> Suchary { get; set; }
         public bool ShowNeedAgePics { get; set; }

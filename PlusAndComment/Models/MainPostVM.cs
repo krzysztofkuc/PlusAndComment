@@ -32,8 +32,16 @@ namespace PlusAndComment.Models
         [Display(Name = "Data Rejestracji")]
         public DateTime RegisterDate { get; set; }
         public DateTime? BannEndDate { get; set; }
+        public string CommentParent { get; set; }
+        public int? Parent_ID { get; set; }
+
+        public bool isMainComment { get; set; }
+        
+
         public ICollection<ApplicationUser> UsersVotesOnThisPost;
-        public ICollection<MainPostVM> Posts { get; set; }
+        public ICollection<MainMemVM> Posts { get; set; }
+
+        public MainPostVM Parent { get; set; }
 
         private int amountOfAllComments = 0;
         private bool AmountOofCOmmentsCounted = false;
@@ -45,12 +53,12 @@ namespace PlusAndComment.Models
                 return this.amountOfAllComments;
             }}
 
-        private void GetAmountOfAllComments(ICollection<MainPostVM> posts)
+        private void GetAmountOfAllComments(ICollection<MainMemVM> posts)
         {
             SetAmountOfAllComments(posts);
         }
 
-        private int SetAmountOfAllComments(ICollection<MainPostVM> posts)
+        private int SetAmountOfAllComments(ICollection<MainMemVM> posts)
         {
             if (posts == null)
                 return 0;
@@ -59,8 +67,8 @@ namespace PlusAndComment.Models
             {
                 this.amountOfAllComments++;
 
-                if (item.Posts.Count > 0)
-                    SetAmountOfAllComments(item.Posts);
+                if (item.Post.Posts.Count > 0)
+                    SetAmountOfAllComments(item.Post.Posts);
             }
             return 0;
         }

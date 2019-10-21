@@ -1,20 +1,22 @@
-﻿using System;
+﻿using PlusAndComment.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
+using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Models.AddPostVMs
 {
-    public class AddArticleVM
+    public class AddArticleVM : MainPostVM
     {
-        [Key]
-        public int ID { get; set; }
+        //[Key]
+        //public int ID { get; set; }
 
-        [Url]
-        [Required]
-        public string Url { get; set; }
+        //[Url]
+        //[Required]
+        //public string Url { get; set; }
 
-        [Required]
-        [Display(Name = "Tytuł")]
-        public string Header { get; set; }
+        //[Required]
+        //[Display(Name = "Tytuł")]
+        //public string Header { get; set; }
 
         [Required]
         [Display(Name = "Krótki opis")]
@@ -40,5 +42,7 @@ namespace PlusAndComment.Models.AddPostVMs
         public string BigPictureUrl { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
+
+        new public string CommentParent { get { return UIPostType.Article.ToFriendlyString(); } }
     }
 }

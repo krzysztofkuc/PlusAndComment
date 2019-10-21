@@ -11,13 +11,13 @@
 <div class="container" style="max-width: 750px; margin-top: 20px;">
     <div class="row">
         <div class="col-md-12">
-            @foreach (var item in Model.Posts)
+            @foreach (var item in Model.MainMems)
             {
                 //render if post is main post
-                if (item.PostEntity_ID == null && !item.Removed)
+                if (item.Post.PostEntity_ID == null && !item.Post.Removed)
                 {
                     <div class="row" style="margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;">
-                        @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser } })
+                        @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser }, { "PostType", "MainMeme" } })
                     </div>
                 }
             }

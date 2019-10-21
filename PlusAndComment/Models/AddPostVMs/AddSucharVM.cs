@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PlusAndComment.Common;
+using System;
 using System.ComponentModel.DataAnnotations;
+using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Models.AddPostVMs
 {
@@ -15,5 +17,7 @@ namespace PlusAndComment.Models.AddPostVMs
         public string AbsThumbPath { get; set; }
 
         public string RelThumbPath { get; set; }
+
+        public string CommentParent { get { return UIPostType.Suchar.ToFriendlyString(); } }
     }
 }

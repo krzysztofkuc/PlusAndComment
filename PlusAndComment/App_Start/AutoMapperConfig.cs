@@ -36,12 +36,14 @@ namespace PlusAndComment.App_Start
 
                 cfg.CreateMap<MainPostVM, PostEntity>()
                 .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.PostType))
+                .ForMember(m => m.MainMem, opt => opt.MapFrom(c => c.Parent))
                 .ForMember(m => m.Posts, opt => opt.MapFrom(c => c.Posts));
 
                 cfg.CreateMap<PostEntity, MainPostVM>()
                 .ForMember(m => m.FileName, opt => opt.MapFrom(c => Path.GetFileName(c.ReferenceUrl)))
                 .ForMember(m => m.PostType, opt => opt.MapFrom(c => c.PostType))
                 .ForMember(m => m.Posts, opt => opt.MapFrom(c => c.Posts))
+                .ForMember(m => m.Parent, opt => opt.MapFrom(c => c.MainMem))
                 .ForMember(x => x.AmountOfAllcommens, opt => opt.Ignore());
 
                 cfg.CreateMap<AddPostVM, PostEntity>()
@@ -84,6 +86,21 @@ namespace PlusAndComment.App_Start
 
                 cfg.CreateMap<AddLinkVM, PostEntity>()
                 .ForMember(x => x.PostType, optx => optx.MapFrom(opt => opt.Type));
+                
+                cfg.CreateMap<MainMems, MainPostVM>()
+                .ForMember(x => x.ID, opt => opt.MapFrom(m => m.ID))
+                .ForMember(x => x.PostEntity_ID, opt => opt.MapFrom(m => m.PostEntity_ID))
+                .ForMember(x => x.ApplicationUser_Id, opt => opt.MapFrom(m => m.PostEntity.ApplicationUser_Id))
+                .ForMember(x => x.EmbedUrl, opt => opt.MapFrom(m => m.PostEntity.EmbedUrl))
+                .ForMember(x => x.ReferenceUrl, opt => opt.MapFrom(m => m.PostEntity.ReferenceUrl))
+                .ForMember(x => x.Header, opt => opt.MapFrom(m => m.PostEntity.Header))
+                .ForMember(x => x.Url, opt => opt.MapFrom(m => m.PostEntity.Url))
+                .ForMember(x => x.NeedAge, opt => opt.MapFrom(m => m.PostEntity.NeedAge));
+
+                cfg.CreateMap<MainMems, MainMemVM>()
+                .ForMember(x => x.ID, opt => opt.MapFrom(m => m.ID))
+                .ForMember(x => x.Post, opt => opt.MapFrom(m => m.PostEntity));
+
 
 
 

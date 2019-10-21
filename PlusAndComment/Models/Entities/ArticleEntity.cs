@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,8 +8,14 @@ namespace PlusAndComment.Models.Entities
     [Table("Articles")]
     public class ArticleEntity
     {
+        public ArticleEntity()
+        {
+            this.Posts = new HashSet<PostEntity>();
+        }
+
         [Key]
         public int Id { get; set; }
+
         public string Url { get; set; }
         public string Header { get; set; }
         public string ShortDesc { get; set; }
@@ -16,11 +23,10 @@ namespace PlusAndComment.Models.Entities
         public string AbsThumbPath { get; set; }
         public string RelThumbPath { get; set; }
         public DateTime? AddedTime { get; set; }
-
-        //Dodać te pola na bazie
+        public string PostType { get; set; }
         public string ThumbType { get; set; }
-        //public string FirstFrameGifRelativePath { get; set; }
-        //public string EmbelVideoUrl { get; set; }
-        //public string BigPictureUrl { get; set; }
+
+        [ForeignKey("Article_ID")]
+        public virtual ICollection<PostEntity> Posts { get; set; }
     }
 }

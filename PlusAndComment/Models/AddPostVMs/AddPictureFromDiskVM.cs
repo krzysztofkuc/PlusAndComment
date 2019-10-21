@@ -1,6 +1,7 @@
 ﻿using PlusAndComment.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
+using static PlusAndComment.Common.Enums;
 
 namespace PlusAndComment.Models.AddPostVMs
 {
@@ -22,5 +23,7 @@ namespace PlusAndComment.Models.AddPostVMs
         public Gif Gif { get; set; }
 
         public string Type { get; set; }
+
+        public string CommentParent { get { return UIPostType.MainMeme.ToFriendlyString(); } }
     }
 }

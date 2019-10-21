@@ -7,6 +7,6 @@
 <div style="margin-top: 20px;">
     @foreach (var article in Model.Articles)
     {
-        @Html.Partial("_ArticleRowPartial", article)
+        @Html.Partial("_ArticleRowPartial", article, new ViewDataDictionary() { {"postType", "Article" }, { "isMainComment", true } })
     }
 </div>
