@@ -37,15 +37,11 @@ namespace PlusAndComment.Models.Entities
         public string CommentParent { get; set; }
         public Nullable<int> Article_ID { get; set; }
 
-        [ForeignKey("MainMem")]
-        public Nullable<int> MainMems_ID_Comment { get; set; }
-
-        public bool IsMainComment { get; set; }
+        //public bool IsMainComment { get; set; }
         
-
         public virtual ICollection<PostEntity> Posts { get; set; }
 
-        public virtual MainMems MainMem { get; set; }
+        //public virtual MainMems MainMem { get; set; }
 
         public virtual ApplicationUser User { get; set; }
     }

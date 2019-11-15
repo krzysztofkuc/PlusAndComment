@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace PlusAndComment.Models.Entities
 {
     [Table("MainMems")]
-    public class MainMems
+    public class MainMemsEntity
     {
         [Key]
         public int ID { get; set; }
@@ -15,7 +15,7 @@ namespace PlusAndComment.Models.Entities
 
         public virtual PostEntity PostEntity { get; set; }
 
-        [ForeignKey("MainMems_ID_Comment")]
-        public virtual ICollection<PostEntity> Comments { get; set; }
+        //[ForeignKey("MainMems_ID_Comment")]
+        //public virtual ICollection<PostEntity> Comments { get; set; }
     }
 }

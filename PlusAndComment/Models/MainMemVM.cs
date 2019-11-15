@@ -11,6 +11,6 @@ namespace PlusAndComment.Models
 
         public MainPostVM Post { get; set; }
 
-        public ICollection<MainPostVM> Comments { get; set; }
+        //public ICollection<MainPostVM> Comments { get; set; }
     }
 }

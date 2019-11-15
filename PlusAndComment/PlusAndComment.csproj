@@ -545,11 +545,11 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\AddPost\AddPost.cshtml" />
-    <Content Include="Views\Shared\_PostPartial.cshtml" />
+    <Content Include="Views\Shared\_MainPostPartial.cshtml" />
     <Content Include="Views\Shared\_UserRolePartial.cshtml" />
     <Content Include="Views\Manage\ManageRoles.cshtml" />
     <Content Include="Views\Account\DisplayEmail.cshtml" />
-    <Content Include="Views\Shared\_LeaveCommentPartial.cshtml" />
+    <Content Include="Views\Shared\_AddCommentPartial.cshtml" />
     <Content Include="Views\Shared\_ShowCommentPartial.cshtml" />
     <Content Include="Views\Shared\_ShowAllCommentsPartial.cshtml" />
     <Content Include="Views\Home\SingleMainPost.cshtml" />

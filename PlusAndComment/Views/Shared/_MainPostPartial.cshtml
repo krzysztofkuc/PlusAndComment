@@ -138,10 +138,10 @@
         </div>*@
 
         <div id="leaveMainCommentPartial_@(Model.ID)" style="display: none">
-            @Html.Action("LeaveComment", new { id = Model.ID, type = ViewData["postType"], isMainComment = true })
+            @Html.Action("AddCommentView", new { id = Model.Post.ID, type = ViewData["postType"], isMainComment = true })
         </div>
 
-        @Html.Partial("_CommentsPartial", Model.Comments, new ViewDataDictionary { { "showAllPosts", "false" }, { "postType", ViewData["postType"] }, { "isMainComment", true } })
+        @Html.Partial("_CommentsPartial", Model.Post.Posts, new ViewDataDictionary { { "showAllPosts", "false" }, { "postType", ViewData["postType"] }, { "isMainComment", true } })
 
 
         <div id="commentsMain_@(Model.ID)">

@@ -11,7 +11,7 @@
     int i = 0;
     foreach (var item in Model)
     {
-        @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", "false" }, { "postType", ViewData["postType"] }, { "isMainComment", ViewData["isMainComment"] } })
+        @Html.Partial("_ShowCommentPartial", item, new ViewDataDictionary { { "showAllPosts", "false" }, { "postType", ViewData["postType"] } })
 
         if (item.AmountOfAllcommens > 2)
         {

@@ -17,7 +17,7 @@
                 if (item.Post.PostEntity_ID == null && !item.Post.Removed)
                 {
                     <div class="row" style="margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;">
-                        @Html.Partial("_PostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser }, { "PostType", "MainMeme" } })
+                        @Html.Partial("_MainPostPartial", item, new ViewDataDictionary { { "showNeedAgePics", Model.ShowNeedAgePics }, { "isMobileBrowser", ViewBag.isMobileBrowser }, { "PostType", "MainMeme" } })
                     </div>
                 }
             }

@@ -183,10 +183,10 @@ E:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.OAuth.
 E:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.Google.xml
 E:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.Twitter.xml
 E:\Repositories\PlusAndComment\PlusAndComment\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
-E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csprojAssemblyReference.cache
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.Migrations.AAA.resources
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csproj.GenerateResource.cache
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csproj.CoreCompileInputs.cache
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csproj.CopyComplete
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.dll
 E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.pdb
+E:\Repositories\PlusAndComment\PlusAndComment\obj\Debug\PlusAndComment.csprojAssemblyReference.cache

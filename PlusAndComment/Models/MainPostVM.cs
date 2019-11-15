@@ -36,10 +36,107 @@ namespace PlusAndComment.Models
         public int? Parent_ID { get; set; }
 
         public bool isMainComment { get; set; }
-        
+
+        //public MainMemVM MainMem { get; set; }
+
 
         public ICollection<ApplicationUser> UsersVotesOnThisPost;
-        public ICollection<MainMemVM> Posts { get; set; }
+        public ICollection<MainPostVM
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            > Posts { get; set; }
 
         public MainPostVM Parent { get; set; }
 
@@ -53,12 +150,12 @@ namespace PlusAndComment.Models
                 return this.amountOfAllComments;
             }}
 
-        private void GetAmountOfAllComments(ICollection<MainMemVM> posts)
+        private void GetAmountOfAllComments(ICollection<MainPostVM> posts)
         {
             SetAmountOfAllComments(posts);
         }
 
-        private int SetAmountOfAllComments(ICollection<MainMemVM> posts)
+        private int SetAmountOfAllComments(ICollection<MainPostVM> posts)
         {
             if (posts == null)
                 return 0;
@@ -67,8 +164,8 @@ namespace PlusAndComment.Models
             {
                 this.amountOfAllComments++;
 
-                if (item.Post.Posts.Count > 0)
-                    SetAmountOfAllComments(item.Post.Posts);
+                if (item.Posts.Count > 0)
+                    SetAmountOfAllComments(item.Posts);
             }
             return 0;
         }

@@ -37,7 +37,7 @@ namespace PlusAndComment.Controllers
             HomeVM homeVm = new HomeVM();
             homeVm.CurrentPage = page;
             homeVm.PostsCapacity = dbContext.MainMems.OrderByDescending(m => m.ID).Where(m => !m.PostEntity.Removed).Count();
-            homeVm.MainMems = AutoMapper.Mapper.Map<ICollection<MainMems>,ICollection<MainMemVM>>(posts);
+            homeVm.MainMems = AutoMapper.Mapper.Map<ICollection<MainMemsEntity>,ICollection<MainMemVM>>(posts);
 
             //var sim = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
 
@@ -117,14 +117,14 @@ namespace PlusAndComment.Controllers
             return RedirectToAction("Index");
         }
 
-        private ICollection<MainMemVM> JoinPostsWithUsers(ICollection<MainMemVM> posts)
+        private ICollection<MainPostVM> JoinPostsWithUsers(ICollection<MainPostVM> posts)
         {
             foreach (var post in posts)
             {
-                post.Post.UsersVotesOnThisPost = dbContext.UserPosts.Where(m => m.IdPost == post.ID).Select(x => (ApplicationUser)x.User).ToList();
+                post.UsersVotesOnThisPost = dbContext.UserPosts.Where(m => m.IdPost == post.ID).Select(x => (ApplicationUser)x.User).ToList();
 
-                if (post.Post.Posts.Count > 0)
-                    JoinPostsWithUsers(post.Post.Posts);
+                if (post.Posts.Count > 0)
+                    JoinPostsWithUsers(post.Posts);
             }
 
             return posts;
@@ -169,7 +169,7 @@ namespace PlusAndComment.Controllers
             //dbContext.Posts.Attach(parentPost);
             //dbContext.Entry(parentPost).State = EntityState.Modified;
 
-            MainMems mm = new MainMems();
+            MainMemsEntity mm = new MainMemsEntity();
             mm.PostEntity = postEntity;
             dbContext.MainMems.Add(mm);
             dbContext.Entry(mm).State = EntityState.Added;
@@ -448,17 +448,43 @@ namespace PlusAndComment.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult AddCommentView(int id, string type, bool isMainComment)
+        {
+            MainPostVM comment = new MainPostVM();
+            comment.isMainComment = isMainComment;
+            comment.PostEntity_ID = id;
+            if (isMainComment)
+            {
+                comment.Parent_ID = id;
+            }
+
+            //PostEntity parentPost = dbContext.Posts.FirstOrDefault(m => m.ID == id && m.PostType == type);
+
+            //comment.CommentParent = parentPost?.CommentParent;
+            comment.PostType = type;
+
+            return PartialView("_AddCommentPartial", comment);
+        }
+
+        [AllowAnonymous]
+        public ActionResult LeaveCommentUnderComment(int id, string type, bool isMainComment)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        [AllowAnonymous]
         public ActionResult LeaveComment(int id, string type, bool isMainComment)
         {
             MainPostVM newPost = new MainPostVM();
 
-            if (isMainComment)
-            {
-                newPost.Parent_ID = id;
-            }
+            //if (isMainComment)
+            //{
+            //    newPost.Parent_ID = id;
+            //}
 
             newPost.PostEntity_ID = id;
-            newPost.isMainComment = isMainComment;
+            //newPost.isMainComment = isMainComment;
 
 
             PostEntity parentPost = dbContext.Posts.FirstOrDefault(m => m.ID == id && m.PostType == type);
@@ -480,7 +506,8 @@ namespace PlusAndComment.Controllers
                 return PartialView("_LeaveCommentPartial",post);
             }
 
-            var parentPost = dbContext.Posts.FirstOrDefault(m => m.ID == post.PostEntity_ID && m.PostType == post.PostType);
+            var parentComment = dbContext.Posts.FirstOrDefault(m => m.ID == post.PostEntity_ID);
+            var mainMem = dbContext.MainMems.FirstOrDefault(m => m.ID == post.PostEntity_ID);
 
             var user =  dbContext.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             if (user != null)
@@ -491,20 +518,41 @@ namespace PlusAndComment.Controllers
 
             var ent = AutoMapper.Mapper.Map<PostEntity>(post);
 
+            if (parentComment != null)
+            {
+                ent.PostEntity_ID = parentComment.ID;
+                parentComment.Posts.Add(ent);
+                dbContext.Entry(ent).State = EntityState.Added;
+
+                dbContext.Posts.Attach(parentComment);
+                dbContext.Entry(parentComment).State = EntityState.Modified;
+            }
+            else if(mainMem != null)
+            {
+                dbContext.Posts.Add(ent);
+                //mainMem.PostEntity.Posts.Add(ent);
+                dbContext.Entry(ent).State = EntityState.Added;
+            }
+
             if (post.isMainComment)
             {
-                switch(post.PostType)
+                switch (post.PostType)
                 {
                     case "Article":
                         ent.Article_ID = post.Parent_ID;
                         post.Parent_ID = null;
                         break;
                     case "MainMeme":
-                        ent.MainMems_ID_Comment = post.Parent_ID;
+
+                        //var mainMem = dbContext.MainMems.FirstOrDefault(x => x.ID == post.PostEntity_ID);
+                        //if(mainMem != null)
+                        //{
+                        //    mainMem.PostEntity.comme
+                        //}
 
                         //problem when when attached main ameme and comment
                         //ent.PostEntity_ID = null;
-                        post.Parent_ID = null;
+                        //post.Parent_ID = null;
                         break;
 
                 }
@@ -523,20 +571,6 @@ namespace PlusAndComment.Controllers
             //    }
             //}
 
-            if (parentPost != null)
-            {
-                ent.PostEntity_ID = parentPost.ID;
-                parentPost.Posts.Add(ent);
-                dbContext.Entry(ent).State = EntityState.Added;
-
-                dbContext.Posts.Attach(parentPost);
-                dbContext.Entry(parentPost).State = EntityState.Modified;
-            }
-            else
-            {
-                dbContext.Posts.Add(ent);
-                dbContext.Entry(ent).State = EntityState.Added;
-            }
 
             dbContext.SaveChanges();
             post.ID = ent.ID;
@@ -984,7 +1018,7 @@ namespace PlusAndComment.Controllers
                 if (item.Post.PostEntity_ID == null && !item.Post.Removed)
                 {
                     resultHtml.Append("<div class='row' style='margin-bottom: 20px; background-color: #3C4B53; border-radius: 4px;'>");
-                    resultHtml.Append(RenderPartialViewToString("_PostPartial", item, homeVm.ShowNeedAgePics, amount));
+                    resultHtml.Append(RenderPartialViewToString("_MainPostPartial", item, homeVm.ShowNeedAgePics, amount));
                     resultHtml.Append("</div>");
                 }
             }

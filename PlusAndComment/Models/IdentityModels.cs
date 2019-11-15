@@ -47,7 +47,7 @@ namespace PlusAndComment.Models
         public virtual DbSet<UserPosts> UserPosts { get; set; }
         public virtual DbSet<ArticleEntity> Articles { get; set; }
         public virtual DbSet<SucharEntity> Suchary { get; set; }
-        public virtual DbSet<MainMems> MainMems { get; set; }
+        public virtual DbSet<MainMemsEntity> MainMems { get; set; }
         public virtual DbSet<UserProfileSettings> UserProfileSettings { get; set; }
 
         //protected override void OnModelCreating(DbModelBuilder modelBuilder)
